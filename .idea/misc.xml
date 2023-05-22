@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/drawable/bg_color.xml" value="0.1255" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/drawable/button_rounded_border.xml" value="0.1255" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/drawable/button_rounded_border2.xml" value="0.1255" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/drawable/button_rounded_border3.xml" value="0.1255" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/drawable/button_rounded_border4.xml" value="0.1255" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/drawable/button_social.xml" value="0.1255" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/activity_home.xml" value="0.2015625" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/activity_login.xml" value="0.1" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/activity_recuperacion_password.xml" value="0.2015625" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/activity_registro.xml" value="0.1" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/app_bar_home.xml" value="0.2015625" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/content_home.xml" value="0.2015625" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/fragment_busqueda.xml" value="0.20260416666666667" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/fragment_catalogo.xml" value="0.18854166666666666" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/fragment_configuracion.xml" value="0.20260416666666667" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/fragment_direcciones.xml" value="0.18697916666666667" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/fragment_gym.xml" value="0.20260416666666667" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/fragment_home.xml" value="0.19021739130434784" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/fragment_informacion_p.xml" value="0.18854166666666666" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/fragment_novedades.xml" value="0.20260416666666667" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/fragment_ofertas.xml" value="0.18854166666666666" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/fragment_opciones.xml" value="0.20260416666666667" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/fragment_pago.xml" value="0.20260416666666667" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/fragment_pedidos.xml" value="0.18854166666666666" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/fragment_perfil.xml" value="0.20260416666666667" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/fragment_productos.xml" value="0.20364583333333333" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/fragment_recomendados.xml" value="0.20260416666666667" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/fragment_slideshow.xml" value="0.2015625" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/lista_item_registro.xml" value="0.25" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/nav_header_home.xml" value="0.18" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/ss0.xml" value="0.1879432624113475" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/ss1.xml" value="0.2115036231884058" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/layout/ss2.xml" value="0.2115036231884058" />
+        <entry key="..\:/Users/Monica/AndroidStudioProjects/SportsFan/app/src/main/res/menu/home.xml" value="0.20364583333333333" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
