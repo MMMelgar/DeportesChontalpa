@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="visible"
+    tools:context=".Productos">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/T1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/gris_1"
+            android:gravity="center"
+            android:text="Agregar Productos"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:dropDownWidth="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="10dp"
+            />
+
+        <EditText
+            android:id="@+id/etxt1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:ems="10"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/etxt2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:ems="10"
+            android:visibility="gone"/>
+
+        <EditText
+            android:id="@+id/etxt3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:ems="10"
+            android:visibility="gone"/>
+
+        <EditText
+            android:id="@+id/etxt4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:ems="10"
+            android:visibility="gone"/>
+
+        <EditText
+            android:id="@+id/etxt5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:ems="10"
+            android:visibility="gone"/>
+
+        <EditText
+            android:id="@+id/etxt6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:ems="10"
+            android:visibility="gone"/>
+
+        <EditText
+            android:id="@+id/etxt7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:ems="10"
+            android:visibility="gone"/>
+
+        <Spinner
+            android:id="@+id/spncat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:dropDownWidth="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            />
+
+        <Button
+            android:id="@+id/agregar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="39dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/button_rounded_border3"
+            android:clickable="true"
+            android:text="GUARDAR" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
