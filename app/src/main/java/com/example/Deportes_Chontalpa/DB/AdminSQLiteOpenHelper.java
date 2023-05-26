@@ -1,4 +1,4 @@
-package com.example.DeportesChontalpa.DB;
+package com.example.Deportes_Chontalpa.DB;
 
 import android.content.ContentValues;
 import android.content.Context;

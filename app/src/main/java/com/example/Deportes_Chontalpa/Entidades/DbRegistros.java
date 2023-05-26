@@ -1,4 +1,4 @@
-package com.example.DeportesChontalpa.Entidades;
+package com.example.Deportes_Chontalpa.Entidades;
 
 public class DbRegistros {
 

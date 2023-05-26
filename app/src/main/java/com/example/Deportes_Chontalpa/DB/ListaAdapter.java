@@ -1,4 +1,4 @@
-package com.example.DeportesChontalpa.DB;
+package com.example.Deportes_Chontalpa.DB;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import com.example.DeportesChontalpa.Entidades.DbRegistros;
-import com.example.DeportesChontalpa.R;
+import com.example.Deportes_Chontalpa.Entidades.DbRegistros;
+import com.example.Deportes_Chontalpa.R;
 import java.util.ArrayList;
 
 public class ListaAdapter extends BaseAdapter {

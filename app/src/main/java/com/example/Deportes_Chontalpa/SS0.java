@@ -1,22 +1,22 @@
-package com.example.DeportesChontalpa;
+package com.example.Deportes_Chontalpa;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-public class SS2 extends AppCompatActivity {
+public class SS0 extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ss2);
+        setContentView(R.layout.ss0);
 
         new Handler().postDelayed(new Runnable(){
             public void run(){
-                startActivity(new Intent(SS2.this, Home.class));
+                startActivity(new Intent(SS0.this, SS1.class));
                 finish();
             }
-        },4000);
+        },1000);
     }
 }

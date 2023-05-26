@@ -1,36 +1,45 @@
 {
   "project_info": {
-    "project_number": "652057799496",
-    "project_id": "sports-fan-40227",
-    "storage_bucket": "sports-fan-40227.appspot.com"
+    "project_number": "928305858320",
+    "project_id": "deportes-chontalpa",
+    "storage_bucket": "deportes-chontalpa.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:652057799496:android:be6369f53dd2cde32ea17d",
+        "mobilesdk_app_id": "1:928305858320:android:d88becaa966559b5f34795",
         "android_client_info": {
-          "package_name": "com.example.sportsfan"
+          "package_name": "com.example.Deportes_Chontalpa"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "652057799496-t0n4kmspcu34lkhud552csr33kl51kdp.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBYwk5rsDKQ41Aj4S0eef_TIFPfmzDl8bA"
+          "current_key": "AIzaSyCkogUM2hXm938mH_GoMw-U2q7fGtLAqp4"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "652057799496-t0n4kmspcu34lkhud552csr33kl51kdp.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928305858320:android:e70b73d0d53a3673f34795",
+        "android_client_info": {
+          "package_name": "com.kodegeek.yourpocket"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkogUM2hXm938mH_GoMw-U2q7fGtLAqp4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
         }
       }
     }

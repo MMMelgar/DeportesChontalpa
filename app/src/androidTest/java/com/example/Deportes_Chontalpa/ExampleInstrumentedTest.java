@@ -1,4 +1,4 @@
-package com.example.DeportesChontalpa;
+package com.example.Deportes_Chontalpa;
 
 import android.content.Context;
 

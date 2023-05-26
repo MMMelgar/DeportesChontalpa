@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.DeportesChontalpa">
+    package="com.example.Deportes_Chontalpa">
 
     <application
         android:allowBackup="true"
@@ -14,22 +14,10 @@
         android:theme="@style/Theme.SportsFan"
         tools:targetApi="31">
         <activity
-            android:name=".ui.Perfil.Recuperacion_Password"
+            android:name="com.example.Deportes_Chontalpa.com.example.DeportesChontalpa.SS1"
             android:exported="false" />
         <activity
-            android:name=".ui.Perfil.Registro"
-            android:exported="false" />
-        <activity
-            android:name=".SS2"
-            android:exported="false" />
-        <activity
-            android:name=".ui.Perfil.LoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SS1"
-            android:exported="false" />
-        <activity
-            android:name=".SS0"
+            android:name="com.example.Deportes_Chontalpa.com.example.DeportesChontalpa.SS0"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,11 +25,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Home"
-            android:exported="false"
-            android:label="@string/title_activity_home"
-            android:theme="@style/Theme.SportsFan.NoActionBar" />
     </application>
 
 </manifest>
