@@ -3,16 +3,13 @@ package com.example.Deportes_Chontalpa;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.ArrayList;
 
 public class Carrito extends AppCompatActivity {
@@ -20,6 +17,7 @@ public class Carrito extends AppCompatActivity {
     Cursor cursor;
     ListView lista;
     TextView total;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +29,7 @@ public class Carrito extends AppCompatActivity {
     /**
      * Metodo encargado de hacer la conexion con la BD
      */
-    public void ejecutarQuery(){
+    public void ejecutarQuery() {
         //InstanciaciÃ³n de la clase HelperBD
         HelperBD helper = new HelperBD(this);
         //Se habilita la bd para obtener datos
@@ -57,7 +55,7 @@ public class Carrito extends AppCompatActivity {
     /**
      * Metodo encargado de definir los datos del ListView correspondiente
      */
-    public void definirLista(){
+    public void definirLista() {
         //Se realiza un captura de error en caso de que no existan articulos en la tabla
         try {
             //Llamado al metodo ejecutarQuery()
@@ -76,7 +74,7 @@ public class Carrito extends AppCompatActivity {
             ArrayList<String> producto = new ArrayList<String>();
 
             //Ciclo do-while que recorre el cursor guardando los datos obtenidos en el ArrayList producto
-            do{
+            do {
                 // Declaracion de valores obtenidos en variables utilizadas para calcular el total
 
                 int cant = Integer.parseInt(cursor.getString(1));
@@ -88,7 +86,7 @@ public class Carrito extends AppCompatActivity {
 
                 //Variable acumuladora que va calculando el total el pedido
                 acum = acum + (precio * cant);
-            }while (cursor.moveToNext());//Fin Do-While
+            } while (cursor.moveToNext());//Fin Do-While
 
             //Definiciin de adaptador
             ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, producto);
@@ -97,18 +95,18 @@ public class Carrito extends AppCompatActivity {
             total.setText(total.getText() + "$" + acum);
             //Se cierra el cursor
             cursor.close();
-        }catch(Exception e ){
+        } catch (Exception e) {
             //Se muestra en pantalla si no se encuentran registros en la tabla de la BD
-            Toast.makeText(this,"NO HAY ARTICULOS EN EL CARRITO",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "NO HAY ARTICULOS EN EL CARRITO", Toast.LENGTH_LONG).show();
         }//Fin Try-Catch
     }//Fin definirLista()
 
     /**
-     //limpiar el carrito
-
+     * //limpiar el carrito
+     *
      * @param view ParÃ¡metro por defecto
      */
-    public void borrarPedido(View view){
+    public void borrarPedido(View view) {
         //Captura de error de Activity
         try {
             //Se habilita BD para escucha
@@ -117,13 +115,12 @@ public class Carrito extends AppCompatActivity {
             //Se ejecuta una sentencia SQL que elimina todos los registros de la tabla
             db.execSQL(EstructuraBD.SQL_DELETE_REGISTERS);
             onCreate(null);
-        }catch (Exception e){//En caso de error de Activity producido
+        } catch (Exception e) {//En caso de error de Activity producido
             //Se informa por pantalla que el carrito ha sido vaciado
-            Toast.makeText(this,"SE HA VACIADO EL CARRITO",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "SE HA VACIADO EL CARRITO", Toast.LENGTH_LONG).show();
             //Se inicia la Activity MainActivity
-            Intent intento = new Intent(this,MainActivity.class);
+            Intent intento = new Intent(this, MainActivity.class);
             startActivity(intento);
         }//Fin Try-Catch
     }//Fin borrarPedido()
 }
-
