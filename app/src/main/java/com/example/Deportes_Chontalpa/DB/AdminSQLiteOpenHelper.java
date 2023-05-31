@@ -22,6 +22,8 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
     private static final String TABLE8="Direccion";
     private static final String TABLE9="FormasPago";
 
+    private static final String TABLE10="Carrito";
+
     private static final String Nombre="Nom";
 
     private static final int Database_Version=1;
@@ -47,6 +49,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         BaseDeDatos.execSQL("create table " + TABLE7 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + Nombre + " TEXT, TU TEXT, TELEFONO TEXT)");
         BaseDeDatos.execSQL("create table " + TABLE8 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + Nombre + " TEXT, CALLE TEXT, COLONIA TEXT, NOEXT TEXT, NOINT TEXT)");
         BaseDeDatos.execSQL("create table " + TABLE9 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + Nombre + " TEXT)");
+        BaseDeDatos.execSQL("create table " + TABLE10 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, IDA TEXT, FOREIGN KEY (IDA) REFERENCES " + TABLE1 +  " (" + ID + "))");
     }
 
     @Override
@@ -60,6 +63,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE7);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE8);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE9);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE10);
         onCreate(sqLiteDatabase);
     }
 

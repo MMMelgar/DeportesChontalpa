@@ -10,13 +10,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.Deportes_Chontalpa.DB.AdminSQLiteOpenHelper;
+import com.example.Deportes_Chontalpa.DB.ListaAdapter;
+import com.example.Deportes_Chontalpa.Entidades.DbRegistros;
+
 import java.util.ArrayList;
 
 public class Carrito extends AppCompatActivity {
 
+    AdminSQLiteOpenHelper DB;
     Cursor cursor;
     ListView lista;
     TextView total;
+    int C,Total;
+    private ListaAdapter adaptador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,27 +38,60 @@ public class Carrito extends AppCompatActivity {
      * Metodo encargado de hacer la conexion con la BD
      */
     public void ejecutarQuery() {
-        //InstanciaciÃ³n de la clase HelperBD
-        HelperBD helper = new HelperBD(this);
-        //Se habilita la bd para obtener datos
-        SQLiteDatabase db = helper.getReadableDatabase();
-        //Arreglo que define de cuales columnas de la BD se recopilarÃ¡ informaciÃ³n
-        String[] projection = {
-                EstructuraBD.COLUMNA2,
-                EstructuraBD.COLUMNA4,
-                EstructuraBD.COLUMNA5
-        };
-        //Se almacena los datos obtenidos de la consulta en un objeto del tipo Cursor
-        cursor = db.query(
-                EstructuraBD.TABLE_NAME,   // La tabla de la consulta
-                projection,             // El arreglo de las columnas de las cuales se retorna informaciÃ³n
-                null,              // Columnas involucradas en declaraciÃ³n WHERE
-                null,          // Valores de la declaraciÃ³n WHERE
-                null,                   // AgrupaciÃ³n de filas
-                null,                   // Filtro de filas
-                null              // Orden
-        );
-    }//Fin ejecutarQuery()
+        DB = new AdminSQLiteOpenHelper(this);
+        Cursor c=DB.getNotas("Carrito");
+        C=0;
+        Total=0;
+        ArrayList<DbRegistros> modelo = new ArrayList<>();
+        if(c.moveToLast()){
+            modelo = Datos(c, modelo);
+        }else{
+            DbRegistros m= new DbRegistros();
+            m.setNombre("No hay productos en el carrito");
+            modelo.add(m);
+        }
+        adaptador=new ListaAdapter(this,modelo);
+    }
+
+    public ArrayList<DbRegistros> Datos(Cursor c, ArrayList<DbRegistros> modelo){
+        DbRegistros m= new DbRegistros();
+            do{
+                Cursor cc=DB.getNota("Arti",c.getString(1));
+                if(cc.moveToLast()){
+                    m.setId(c.getString(0));
+                    m.setNombre(c.getString(1));
+                    m.setDescripcion(c.getString(2));
+                    m.setPrecio(c.getString(3));
+                    m.setDisponibles(c.getString(4));
+                    Cursor c1=DB.getNota("Talla",cc.getString(5));
+                    if(c1.moveToLast()){
+                        m.setTalla(c1.getString(2));
+                    }else{
+                        m.setTalla("N/A");
+                    }
+                    c1=DB.getNota("Color",cc.getString(6));
+                    if(c1.moveToLast()){
+                        m.setColor(c1.getString(2));
+                    }else{
+                        m.setColor("N/A");
+                    }
+                    c1=DB.getNota("Marca",cc.getString(7));
+                    if(c1.moveToLast()){
+                        m.setMarca(c1.getString(2));
+                    }else{
+                        m.setMarca("N/A");
+                    }
+                    c1=DB.getNota("Categoria",cc.getString(8));
+                    if(c1.moveToLast()){
+                        m.setCategoria(c1.getString(2));
+                    }else{
+                        m.setCategoria("N/A");
+                    }
+                    modelo.add(m);
+                }
+            }while(c.moveToPrevious());
+        return modelo;
+    }
 
     /**
      * Metodo encargado de definir los datos del ListView correspondiente

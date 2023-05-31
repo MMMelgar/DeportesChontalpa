@@ -8,6 +8,9 @@ public class DbRegistros {
     private String Talla;
     private String Color;
     private String Marca;
+    private String Disponibles;
+    private String Precio;
+    private String Categoria;
 
     public String getId() {
         return Id;
@@ -56,6 +59,24 @@ public class DbRegistros {
     public void setMarca(String marca) {
         Marca = marca;
     }
+
+    public void setPrecio(String precio){
+        Precio= precio;
+    }
+
+    public String getPrecio(){return Precio;}
+
+    public void setDisponibles(String disponibles){
+        Disponibles= disponibles;
+    }
+
+    public String getDisponibles(){return Disponibles;}
+
+    public void setCategoria(String categoria){
+        Categoria= categoria;
+    }
+
+    public String getCategoria(){return Categoria;}
 
 
 }
