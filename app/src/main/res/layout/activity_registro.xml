@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Perfil.Registro">
+    tools:context=".Perfil.Registro">
 
     <Button
         android:id="@+id/edit"
@@ -68,7 +68,7 @@
     <View
         android:id="@+id/view"
         android:layout_width="414dp"
-        android:layout_height="262dp"
+        android:layout_height="242dp"
         android:background="@color/gris_1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -76,13 +76,13 @@
 
     <ImageView
         android:id="@+id/imageView5"
-        android:layout_width="134dp"
+        android:layout_width="280dp"
         android:layout_height="147dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo" />
+        app:srcCompat="@drawable/Logo_Name" />
 
     <TextView
         android:id="@+id/textView3"
