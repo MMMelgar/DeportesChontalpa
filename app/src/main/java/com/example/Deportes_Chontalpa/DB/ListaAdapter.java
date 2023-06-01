@@ -40,7 +40,7 @@ public class ListaAdapter extends BaseAdapter {
 
         if(convertView==null){
             LayoutInflater layoutInflater= (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-            convertView= layoutInflater.inflate(R.layout.lista_item_catalogo,null);
+            convertView= layoutInflater.inflate(R.layout.lista_item_articulo,null);
         }
 
         TextView Nombre= (TextView) convertView.findViewById(R.id.Nombre);
