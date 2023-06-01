@@ -10,25 +10,25 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        android:layout_height="wrap_content"
+        tools:context=".MainActivity"
+        android:background="@color/white">
 
         <View
-            android:id="@+id/view2"
+            android:id="@+id/view1"
             android:layout_width="414dp"
-            android:layout_height="262dp"
-            android:background="@color/gris_1"
+            android:layout_height="100dp"
+            android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
         <ImageButton
             android:id="@+id/btnMenu"
             android:layout_width="180dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="220dp"
             android:background="#00FFFFFF"
             android:clickable="true"
@@ -37,31 +37,72 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/Name" />
+            app:srcCompat="@drawable/Name"
+            android:text=""/>
 
-        <Button
+        <ImageButton
             android:id="@+id/btnCarrito"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mi Carrito"
-            android:layout_below="@id/btnMenu"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="310dp"
+            android:text=""
+            app:srcCompat="@drawable/baseline_shopping_cart_24" />
 
-        <Button
-            android:id="@+id/btnCatalogo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Catálogo de Ropa Deportiva"
-            android:layout_below="@id/btnCarrito"
-            android:layout_marginTop="16dp"/>
-
-        <Button
+        <ImageButton
             android:id="@+id/btnPerfil"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mi Perfil"
-            android:layout_below="@id/btnCatalogo"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="360dp"
+            android:text=""
+            app:srcCompat="@drawable/baseline_person_24"/>
+
+        <ImageButton
+            android:id="@+id/btnBusqueda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="260dp"
+            android:text=""
+            app:srcCompat="@drawable/baseline_search_24"
+            />
+
+        <Spinner
+            android:id="@+id/spn1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="70dp"
+            android:layout_marginEnd="220dp"
+            android:background="@color/black"
+            android:dropDownWidth="wrap_content"
+            android:spinnerMode="dropdown"
+            android:textColor="@color/white"/>
+
+        <Spinner
+            android:id="@+id/spn2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:dropDownWidth="wrap_content"
+            android:layout_marginStart="200dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="70dp"
+            android:visibility="gone"
+            android:background="@color/gris_claro_1"
+            android:spinnerMode="dropdown"
+            />
+
+        <ListView
+            android:id="@+id/Lista"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="100dp"
+            android:background="@color/black"
+            android:gravity="center_horizontal|center_vertical"
+            android:textColor="@color/white"
+            android:textSize="20sp">
+        </ListView>
 
     </RelativeLayout>
 
