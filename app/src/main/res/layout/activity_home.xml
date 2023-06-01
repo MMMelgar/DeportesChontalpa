@@ -8,17 +8,47 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <RelativeLayout
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp"
+        tools:context=".MainActivity">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            />
+        <Button
+            android:id="@+id/btnMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Menú"
+            android:layout_marginTop="16dp"/>
+
+        <Button
+            android:id="@+id/btnCarrito"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mi Carrito"
+            android:layout_below="@id/btnMenu"
+            android:layout_marginTop="16dp"/>
+
+        <Button
+            android:id="@+id/btnCatalogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Catálogo de Ropa Deportiva"
+            android:layout_below="@id/btnCarrito"
+            android:layout_marginTop="16dp"/>
+
+        <Button
+            android:id="@+id/btnPerfil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mi Perfil"
+            android:layout_below="@id/btnCatalogo"
+            android:layout_marginTop="16dp"/>
 
     </RelativeLayout>
-    </androidx.drawerlayout.widget.DrawerLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>

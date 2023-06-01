@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -20,7 +21,6 @@ import java.util.ArrayList;
 public class Carrito extends AppCompatActivity {
 
     AdminSQLiteOpenHelper DB;
-    Cursor cursor;
     ListView lista;
     TextView total;
     int C,Total;
@@ -30,13 +30,9 @@ public class Carrito extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store);
-        //Llamado al metodo definirLista()
         definirLista();
     }
 
-    /**
-     * Metodo encargado de hacer la conexion con la BD
-     */
     public void ejecutarQuery() {
         DB = new AdminSQLiteOpenHelper(this);
         Cursor c=DB.getNotas("Carrito");
@@ -47,22 +43,22 @@ public class Carrito extends AppCompatActivity {
             modelo = Datos(c, modelo);
         }else{
             DbRegistros m= new DbRegistros();
-            m.setNombre("No hay productos en el carrito");
+            m.setNombre("No hay articulos en el carrito");
             modelo.add(m);
         }
         adaptador=new ListaAdapter(this,modelo);
     }
 
     public ArrayList<DbRegistros> Datos(Cursor c, ArrayList<DbRegistros> modelo){
-        DbRegistros m= new DbRegistros();
             do{
                 Cursor cc=DB.getNota("Arti",c.getString(1));
                 if(cc.moveToLast()){
-                    m.setId(c.getString(0));
-                    m.setNombre(c.getString(1));
-                    m.setDescripcion(c.getString(2));
-                    m.setPrecio(c.getString(3));
-                    m.setDisponibles(c.getString(4));
+                    DbRegistros m= new DbRegistros();
+                    m.setId(cc.getString(0));
+                    m.setNombre(cc.getString(1));
+                    m.setDescripcion(cc.getString(2));
+                    m.setPrecio(cc.getString(3));
+                    m.setDisponibles(cc.getString(4));
                     Cursor c1=DB.getNota("Talla",cc.getString(5));
                     if(c1.moveToLast()){
                         m.setTalla(c1.getString(2));
@@ -87,81 +83,40 @@ public class Carrito extends AppCompatActivity {
                     }else{
                         m.setCategoria("N/A");
                     }
+                    m.setCantidad(c.getString(2));
                     modelo.add(m);
+                    Total=Total+(Integer.parseInt(m.getPrecio())*Integer.parseInt(m.getCantidad()));
                 }
             }while(c.moveToPrevious());
         return modelo;
     }
 
-    /**
-     * Metodo encargado de definir los datos del ListView correspondiente
-     */
     public void definirLista() {
-        //Se realiza un captura de error en caso de que no existan articulos en la tabla
         try {
-            //Llamado al metodo ejecutarQuery()
             ejecutarQuery();
-            //Se posiciona el cursor en el primer valor obtenido
-            cursor.moveToFirst();
-            //Se instancia XML a JAVA
             lista = findViewById(R.id.lista);
             total = findViewById(R.id.txt_total);
-            //Creacion de una variable acumuladora utilizada para el total
-            int acum = 0;
-
-            //Instanciacion de un ArrayList del tipo String que sera utilizada para ingresar los datos obtenidos
-            //de la consulta, en el adaptador
-
-            ArrayList<String> producto = new ArrayList<String>();
-
-            //Ciclo do-while que recorre el cursor guardando los datos obtenidos en el ArrayList producto
-            do {
-                // Declaracion de valores obtenidos en variables utilizadas para calcular el total
-
-                int cant = Integer.parseInt(cursor.getString(1));
-                int precio = Integer.parseInt(cursor.getString(2));
-                //Se guarda una sentencia en el ArrayList que contiente todos los valores obtenidos de la consulta
-
-                producto.add(cursor.getString(0) + " \nCantidad: " + cant + " \nPrecio unitario: $" + precio +
-                        " \nSubtotal: $" + (precio * cant));
-
-                //Variable acumuladora que va calculando el total el pedido
-                acum = acum + (precio * cant);
-            } while (cursor.moveToNext());//Fin Do-While
-
-            //Definiciin de adaptador
-            ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, producto);
             lista.setAdapter(adaptador);
-            //Se define el total obtenido en el TextView total
-            total.setText(total.getText() + "$" + acum);
-            //Se cierra el cursor
-            cursor.close();
+            total.setText(total.getText() + "$" + Total);
         } catch (Exception e) {
-            //Se muestra en pantalla si no se encuentran registros en la tabla de la BD
-            Toast.makeText(this, "NO HAY ARTICULOS EN EL CARRITO", Toast.LENGTH_LONG).show();
-        }//Fin Try-Catch
-    }//Fin definirLista()
+            Mensaje("NO HAY ARTICULOS EN EL CARRITO");
+        }
+    }
 
-    /**
-     * //limpiar el carrito
-     *
-     * @param view ParÃ¡metro por defecto
-     */
     public void borrarPedido(View view) {
-        //Captura de error de Activity
         try {
-            //Se habilita BD para escucha
-            HelperBD helper = new HelperBD(this);
-            SQLiteDatabase db = helper.getReadableDatabase();
-            //Se ejecuta una sentencia SQL que elimina todos los registros de la tabla
-            db.execSQL(EstructuraBD.SQL_DELETE_REGISTERS);
+            DB.deleteTablas("Carrito");
             onCreate(null);
-        } catch (Exception e) {//En caso de error de Activity producido
-            //Se informa por pantalla que el carrito ha sido vaciado
-            Toast.makeText(this, "SE HA VACIADO EL CARRITO", Toast.LENGTH_LONG).show();
-            //Se inicia la Activity MainActivity
-            Intent intento = new Intent(this, MainActivity.class);
+        } catch (Exception e) {
+            Mensaje("SE HA VACIADO EL CARRITO");
+            Intent intento = new Intent(this, Home.class);
             startActivity(intento);
-        }//Fin Try-Catch
-    }//Fin borrarPedido()
+        }
+    }
+
+    private void Mensaje(String msj){
+        Toast toast=Toast.makeText(this,msj,Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER_VERTICAL,0,0);
+        toast.show();
+    }
 }

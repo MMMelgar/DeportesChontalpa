@@ -11,6 +11,7 @@ public class DbRegistros {
     private String Disponibles;
     private String Precio;
     private String Categoria;
+    private String Cantidad;
 
     public String getId() {
         return Id;
@@ -78,5 +79,11 @@ public class DbRegistros {
 
     public String getCategoria(){return Categoria;}
 
+    public void setCantidad(String cantidad){
+        Cantidad= cantidad;
+    }
 
+    public String getCantidad(){
+        return Cantidad;
+    }
 }

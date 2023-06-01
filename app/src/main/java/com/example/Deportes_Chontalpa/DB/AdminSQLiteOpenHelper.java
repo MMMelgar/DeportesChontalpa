@@ -49,7 +49,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         BaseDeDatos.execSQL("create table " + TABLE7 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + Nombre + " TEXT, TU TEXT, TELEFONO TEXT)");
         BaseDeDatos.execSQL("create table " + TABLE8 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + Nombre + " TEXT, CALLE TEXT, COLONIA TEXT, NOEXT TEXT, NOINT TEXT)");
         BaseDeDatos.execSQL("create table " + TABLE9 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + Nombre + " TEXT)");
-        BaseDeDatos.execSQL("create table " + TABLE10 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, IDA TEXT, FOREIGN KEY (IDA) REFERENCES " + TABLE1 +  " (" + ID + "))");
+        BaseDeDatos.execSQL("create table " + TABLE10 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, IDA TEXT, CANT INTEGER, FOREIGN KEY (IDA) REFERENCES " + TABLE1 +  " (" + ID + "))");
     }
 
     @Override
@@ -173,7 +173,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         return c;
     }
 
-    public void deleteNotasTablas(String TABLE){
+    public void deleteTablas(String TABLE){
         this.getWritableDatabase().delete(TABLE,null,null);
     }
 
