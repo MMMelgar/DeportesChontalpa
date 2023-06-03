@@ -6,7 +6,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-
 public class PurchaseProcessor {
     public static void main(String[] args) {
         String purchaseData = "{ \"productId\": 12345, \"productName\": \"Zapatillas deportivas\", \"quantity\": 1, \"price\": 99.99 }";
@@ -15,11 +14,11 @@ public class PurchaseProcessor {
 
         try {
             // Realizar la compra
-            String purchaseResponse = sendPurchase(purchaseData, purchaseEndpoint);
+            String purchaseResponse = sendRequest(purchaseData, purchaseEndpoint, "POST");
             if (purchaseResponse.equals("success")) {
                 // Obtener detalles de envío
                 String shippingData = "{ \"productId\": 12345, \"address\": \"123 Main St, City, State\", \"recipient\": \"John Doe\" }";
-                String shippingResponse = sendShippingDetails(shippingData, shippingEndpoint);
+                String shippingResponse = sendRequest(shippingData, shippingEndpoint, "POST");
 
                 // Mostrar detalles de compra y envío
                 if (shippingResponse.equals("success")) {
@@ -40,50 +39,26 @@ public class PurchaseProcessor {
         }
     }
 
-    private static String sendPurchase(String purchaseData, String purchaseEndpoint) throws Exception {
-        URL url = new URL(purchaseEndpoint);
+    private static String sendRequest(String requestData, String endpointURL, String requestMethod) throws Exception {
+        URL url = new URL(endpointURL);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setDoOutput(true);
-        conn.setRequestMethod("POST");
+        conn.setRequestMethod(requestMethod);
         conn.setRequestProperty("Content-Type", "application/json");
 
         OutputStream os = conn.getOutputStream();
-        os.write(purchaseData.getBytes());
+        os.write(requestData.getBytes());
         os.flush();
 
         int responseCode = conn.getResponseCode();
         BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        String response = "";
+        StringBuilder response = new StringBuilder();
         String line;
         while ((line = br.readLine()) != null) {
-            response += line;
+            response.append(line);
         }
         br.close();
 
-        return response;
-    }
-
-    private static String sendShippingDetails(String shippingData, String shippingEndpoint) throws Exception {
-        URL url = new URL(shippingEndpoint);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setDoOutput(true);
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/json");
-
-        OutputStream os = conn.getOutputStream();
-        os.write(shippingData.getBytes());
-        os.flush();
-
-        int responseCode = conn.getResponseCode();
-        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        String response = "";
-        String line;
-        while ((line = br.readLine()) != null) {
-            response += line;
-        }
-        br.close();
-
-        return response;
+        return response.toString();
     }
 }
-

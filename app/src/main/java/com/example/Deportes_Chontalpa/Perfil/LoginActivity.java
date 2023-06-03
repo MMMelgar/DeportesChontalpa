@@ -25,97 +25,97 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private FirebaseAuth Auth = FirebaseAuth.getInstance();
-    private GoogleSignInClient GoogleSignInclient;
-    int RC_SIGN_IN = 1;
-    String TAG ="GoogleSignInLoginActivity";
+    private FirebaseAuth firebaseAuth;
+    private GoogleSignInClient googleSignInClient;
+    private static final int RC_SIGN_IN = 1;
+    private static final String TAG = "GoogleSignInLoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        /*GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
-        GoogleSignInclient = GoogleSignIn.getClient(this,gso);*/
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
-    public void Registro(View view){
+    public void Registro(View view) {
         startActivity(new Intent(this, Registro.class));
     }
 
-    public void Recuperacion_Password(View view){
+    public void Recuperacion_Password(View view) {
         startActivity(new Intent(this, Recuperacion_Password.class));
     }
 
-    public void Inicio_Sesion(View view){
-        TextView i_Text_Error=(TextView)findViewById(R.id.TextError);
-        i_Text_Error.setText("");
-        String en_Email = ((EditText) findViewById(R.id.Correo_Electronico)).getText().toString();
-        String en_Password = ((EditText) findViewById(R.id.Contraseña)).getText().toString();
-        if(!en_Email.isEmpty() && !en_Password.isEmpty()){
-            login(en_Email, en_Password);
-        }else{
-            i_Text_Error.setText("Rellene todos los campos antes de continuar");
+    public void Inicio_Sesion(View view) {
+        TextView iTextError = findViewById(R.id.TextError);
+        iTextError.setText("");
+
+        String enEmail = ((EditText) findViewById(R.id.Correo_Electronico)).getText().toString();
+        String enPassword = ((EditText) findViewById(R.id.Contraseña)).getText().toString();
+
+        if (!enEmail.isEmpty() && !enPassword.isEmpty()) {
+            login(enEmail, enPassword);
+        } else {
+            iTextError.setText("Rellene todos los campos antes de continuar");
         }
     }
 
-    public void signInGoogle(View view){
-        Intent signInIntent = GoogleSignInclient.getSignInIntent();
+    public void signInGoogle(View view) {
+        Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == RC_SIGN_IN){
+        if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            if(task.isSuccessful()){
-
-                try{
-                    GoogleSignInAccount account = task.getResult(ApiException.class);
-                    Log.d(TAG,"firebaseAuthWithGoogle:" + account.getId());
-                    firebaseAuthWithGoogle(account.getIdToken());
-                } catch (ApiException e){
-                    Log.w(TAG,"Google sign in failed",e);
-                }
-            }else{
-                Log.d(TAG, "Error, login no exitoso:" + task.getException().toString());
-                Toast.makeText(this, "Ocurrio un error. Intentelo Nuevamente" + task.getException().toString(), Toast.LENGTH_LONG).show();
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
+                firebaseAuthWithGoogle(account.getIdToken());
+            } catch (ApiException e) {
+                Log.w(TAG, "Google sign in failed", e);
             }
         }
     }
 
-    private void login(String Email, String Contraseña){
-        TextView i_Text_Error=(TextView)findViewById(R.id.TextError);
+    private void login(String email, String password) {
+        TextView iTextError = findViewById(R.id.TextError);
 
-        Auth.signInWithEmailAndPassword(Email,Contraseña).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     startActivity(new Intent(LoginActivity.this, SS2.class));
-                    LoginActivity.this.finish();
-                }else{
-                    i_Text_Error.setText("Ocurrio un error\nVerifique los datos e intentelo nuevamente");
+                    finish();
+                } else {
+                    iTextError.setText("Ocurrió un error. Verifique los datos e intente nuevamente");
                 }
             }
         });
     }
 
-    private void firebaseAuthWithGoogle(String idToken){
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken,null);
-        Auth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     Log.d(TAG, "signInWithCredential: success");
                     startActivity(new Intent(LoginActivity.this, SS2.class));
-                    LoginActivity.this.finish();
-                } else{
+                    finish();
+                } else {
                     Log.w(TAG, "signInWithCredential_failure", task.getException());
                 }
             }
         });
     }
-
 }

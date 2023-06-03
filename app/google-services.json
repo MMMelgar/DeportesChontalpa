@@ -12,7 +12,12 @@
           "package_name": "com.example.Deportes_Chontalpa"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "928305858320-qs38q329lhoaj5p3e7ecu8rk47jvvmek.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCkogUM2hXm938mH_GoMw-U2q7fGtLAqp4"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "928305858320-qs38q329lhoaj5p3e7ecu8rk47jvvmek.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     },
@@ -31,7 +41,12 @@
           "package_name": "com.kodegeek.yourpocket"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "928305858320-qs38q329lhoaj5p3e7ecu8rk47jvvmek.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCkogUM2hXm938mH_GoMw-U2q7fGtLAqp4"
@@ -39,7 +54,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "928305858320-qs38q329lhoaj5p3e7ecu8rk47jvvmek.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

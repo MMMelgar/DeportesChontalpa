@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
 import com.example.Deportes_Chontalpa.Entidades.DbRegistros;
 import com.example.Deportes_Chontalpa.R;
+
 import java.util.ArrayList;
 
 public class ListaAdapter extends BaseAdapter {
@@ -16,8 +18,8 @@ public class ListaAdapter extends BaseAdapter {
     private ArrayList<DbRegistros> notes;
 
     public ListaAdapter(Context context, ArrayList<DbRegistros> notes){
-        this.context= context;
-        this.notes=notes;
+        this.context = context;
+        this.notes = notes;
     }
 
     @Override
@@ -37,26 +39,37 @@ public class ListaAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder viewHolder;
 
-        if(convertView==null){
-            LayoutInflater layoutInflater= (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-            convertView= layoutInflater.inflate(R.layout.lista_item_articulo,null);
+        if (convertView == null) {
+            convertView = LayoutInflater.from(context).inflate(R.layout.lista_item_articulo, parent, false);
+            viewHolder = new ViewHolder();
+            viewHolder.Nombre = convertView.findViewById(R.id.Nombre);
+            viewHolder.Descripcion = convertView.findViewById(R.id.Descripcion);
+            viewHolder.Talla = convertView.findViewById(R.id.Talla);
+            viewHolder.Color = convertView.findViewById(R.id.Color);
+            viewHolder.Marca = convertView.findViewById(R.id.Marca);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        TextView Nombre= (TextView) convertView.findViewById(R.id.Nombre);
-        TextView Descripcion= (TextView) convertView.findViewById(R.id.Descripcion);
-        TextView Talla= (TextView) convertView.findViewById(R.id.Talla);
-        TextView Color= (TextView) convertView.findViewById(R.id.Color);
-        TextView Marca= (TextView) convertView.findViewById(R.id.Marca);
-
-        Nombre.setText(notes.get(position).getNombre());
-        Descripcion.setText(notes.get(position).getDescripcion());
-        Talla.setText(notes.get(position).getTalla());
-        Color.setText(notes.get(position).getColor());
-        Marca.setText(notes.get(position).getMarca());
-
+        DbRegistros note = notes.get(position);
+        viewHolder.Nombre.setText(note.getNombre());
+        viewHolder.Descripcion.setText(note.getDescripcion());
+        viewHolder.Talla.setText(note.getTalla());
+        viewHolder.Color.setText(note.getColor());
+        viewHolder.Marca.setText(note.getMarca());
 
         return convertView;
     }
 
+    static class ViewHolder {
+        TextView Nombre;
+        TextView Descripcion;
+        TextView Talla;
+        TextView Color;
+        TextView Marca;
+    }
 }
+
