@@ -31,7 +31,7 @@
             android:background="#00FFFFFF"
             android:clickable="true"
             android:scaleType="centerInside"
-            app:srcCompat="@drawable/Name" />
+            app:srcCompat="@drawable/name" />
 
         <ImageButton
             android:id="@+id/btnCarrito"
