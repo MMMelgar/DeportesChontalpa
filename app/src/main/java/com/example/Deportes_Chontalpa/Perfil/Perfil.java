@@ -1,4 +1,6 @@
 package com.example.Deportes_Chontalpa.Perfil;
 
-public class Perfil {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class Perfil extends AppCompatActivity {
 }
