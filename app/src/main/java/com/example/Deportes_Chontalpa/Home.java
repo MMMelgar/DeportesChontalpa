@@ -40,7 +40,6 @@ public class Home extends AppCompatActivity implements AdapterView.OnItemSelecte
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Home.this, Carrito.class));
-                finish();
             }
         });
 
@@ -48,7 +47,6 @@ public class Home extends AppCompatActivity implements AdapterView.OnItemSelecte
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Home.this, Perfil.class));
-                finish();
             }
         });
 
@@ -56,7 +54,6 @@ public class Home extends AppCompatActivity implements AdapterView.OnItemSelecte
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Home.this, Perfil.class));
-                finish();
             }
         });
 
