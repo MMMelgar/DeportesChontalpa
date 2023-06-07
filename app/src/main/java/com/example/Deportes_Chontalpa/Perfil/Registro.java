@@ -71,7 +71,7 @@ public class Registro extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task2) {
                                             if (task2.isSuccessful()) {
-                                                startActivity(new Intent(Registro.this, SS2.class));
+                                                setResult(RESULT_OK);
                                                 finish();
                                             }
                                         }

@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.Deportes_Chontalpa.R;
@@ -44,9 +43,9 @@ public class LoginActivity extends AppCompatActivity {
         googleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
-    public void Registro(View view) {
+    /*public void Registro(View view) {
         startActivity(new Intent(this, Registro.class));
-    }
+    }*/
 
     public void Recuperacion_Password(View view) {
         startActivity(new Intent(this, Recuperacion_Password.class));
@@ -66,15 +65,14 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void signInGoogle(View view) {
+    /*public void signInGoogle(View view) {
         Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
+    }*/
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
@@ -94,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    startActivity(new Intent(LoginActivity.this, SS2.class));
+                    setResult(RESULT_OK);
                     finish();
                 } else {
                     iTextError.setText("Ocurrió un error. Verifique los datos e intente nuevamente");

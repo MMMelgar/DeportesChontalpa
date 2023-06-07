@@ -39,6 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginStart="310dp"
+            app:layout_constraintEnd_toEndOf="@+id/btnPerfil"
             app:srcCompat="@drawable/baseline_shopping_cart_24" />
 
         <ImageButton
@@ -47,6 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginStart="360dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/baseline_person_24"/>
 
         <ImageButton
@@ -55,6 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginStart="260dp"
+            app:layout_constraintEnd_toEndOf="@+id/btnCarrito"
             app:srcCompat="@drawable/baseline_search_24" />
 
         <Spinner
@@ -85,11 +88,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="130dp"
-            android:background="@color/gris_claro_1"
+            android:background="@color/black"
             android:gravity="center_horizontal|center_vertical"
             android:textColor="@color/white"
             android:textSize="20sp" />
-
     </RelativeLayout>
-
 </androidx.drawerlayout.widget.DrawerLayout>

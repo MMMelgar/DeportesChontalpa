@@ -8,7 +8,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import com.example.Deportes_Chontalpa.R;
-import com.example.Deportes_Chontalpa.SS2;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,8 +21,9 @@ public class Perfil extends AppCompatActivity implements View.OnClickListener {
     private Button requestReturnButton;
     private Button logoutButton;
     private LinearLayout loggedInLayout;
+    private static final int REQUEST_LOGIN = 1;
 
-    private boolean isLoggedIn = false;
+    private boolean isLoggedIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +46,19 @@ public class Perfil extends AppCompatActivity implements View.OnClickListener {
         configurationButton.setOnClickListener(this);
         requestReturnButton.setOnClickListener(this);
         logoutButton.setOnClickListener(this);
+        isLoggedIn=false;
 
         updateUI();
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == REQUEST_LOGIN){
+            if(resultCode==RESULT_OK){
+                isLoggedIn=true;
+                updateUI();
+            }
+        }
     }
 
     private void updateUI() {
@@ -73,11 +85,12 @@ public class Perfil extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.register_button:
-                startActivity(new Intent(Perfil.this, Registro.class));
+                Intent intentr = new Intent(Perfil.this, Registro.class);
+                startActivityForResult(intentr,REQUEST_LOGIN);
                 break;
             case R.id.login_button:
-                startActivity(new Intent(Perfil.this, LoginActivity.class));
-                updateUI();
+                Intent intentl = new Intent(Perfil.this, LoginActivity.class);
+                startActivityForResult(intentl,REQUEST_LOGIN);
                 break;
             case R.id.view_orders_button:
                 // Lógica para ver los pedidos realizados
@@ -92,11 +105,12 @@ public class Perfil extends AppCompatActivity implements View.OnClickListener {
                 // Lógica para solicitar una devolución
                 break;
             case R.id.logout_button:
-
+                FirebaseAuth.getInstance().signOut();
                 isLoggedIn = false;
                 updateUI();
                 break;
         }
     }
+
 }
 
