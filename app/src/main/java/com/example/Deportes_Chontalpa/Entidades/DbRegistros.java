@@ -11,7 +11,7 @@ public class DbRegistros {
     private String Disponibles;
     private String Precio;
     private String Categoria;
-    private String Cantidad;
+    private int imageResourse;
 
     public String getId() {
         return Id;
@@ -79,11 +79,11 @@ public class DbRegistros {
 
     public String getCategoria(){return Categoria;}
 
-    public void setCantidad(String cantidad){
-        Cantidad= cantidad;
+    public void setImageResourse(int imageResourse) {
+        this.imageResourse = imageResourse;
     }
 
-    public String getCantidad(){
-        return Cantidad;
+    public int getImageResourse() {
+        return imageResourse;
     }
 }

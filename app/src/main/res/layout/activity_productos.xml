@@ -26,6 +26,7 @@
             android:id="@+id/spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:dropDownWidth="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:layout_marginTop="10dp"
@@ -37,8 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
-            android:ems="10"
-            android:visibility="gone" />
+            android:ems="10" />
 
         <EditText
             android:id="@+id/etxt2"
@@ -46,8 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
-            android:ems="10"
-            android:visibility="gone"/>
+            android:ems="10" />
 
         <EditText
             android:id="@+id/etxt3"
@@ -55,8 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
-            android:ems="10"
-            android:visibility="gone"/>
+            android:ems="10" />
 
         <EditText
             android:id="@+id/etxt4"
@@ -64,8 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
-            android:ems="10"
-            android:visibility="gone"/>
+            android:ems="10" />
 
         <EditText
             android:id="@+id/etxt5"
@@ -73,8 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
-            android:ems="10"
-            android:visibility="gone"/>
+            android:ems="10" />
 
         <EditText
             android:id="@+id/etxt6"
@@ -82,8 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
-            android:ems="10"
-            android:visibility="gone"/>
+            android:ems="10" />
 
         <EditText
             android:id="@+id/etxt7"
@@ -98,10 +93,10 @@
             android:id="@+id/spncat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:dropDownWidth="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:layout_marginTop="10dp"
-            android:visibility="gone"
             />
 
         <Button
