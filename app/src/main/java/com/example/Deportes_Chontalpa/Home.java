@@ -16,6 +16,8 @@ import com.example.Deportes_Chontalpa.DB.AdminSQLiteOpenHelper;
 import com.example.Deportes_Chontalpa.DB.ListaAdapterCat;
 import com.example.Deportes_Chontalpa.Entidades.DbRegistros;
 import com.example.Deportes_Chontalpa.Perfil.Perfil;
+import com.google.firebase.FirebaseApp;
+
 import java.util.ArrayList;
 
 public class Home extends AppCompatActivity {
@@ -31,6 +33,7 @@ public class Home extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(this);
         setContentView(R.layout.activity_home);
         Botones();
         Spinners();

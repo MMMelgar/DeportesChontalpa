@@ -2,12 +2,12 @@ package com.example.Deportes_Chontalpa;
 
 import static android.text.InputType.TYPE_CLASS_NUMBER;
 import static android.text.InputType.TYPE_CLASS_TEXT;
-import android.database.Cursor;
+
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,23 +15,38 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import com.example.Deportes_Chontalpa.DB.AdminSQLiteOpenHelper;
+import com.example.Deportes_Chontalpa.DB.Article;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 public class Productos extends AppCompatActivity {
 
     Spinner spiner, spc;
     EditText t1,t2,t3,t4,t5,t6,t7;
     Button btna;
-    String selected="", selected2="", Table="", Nombre="";
+    String selected="", categoria="", imageUrl;
     AdminSQLiteOpenHelper DB;
+    DatabaseReference databaseReference;
+    Query query;
+    private static final int REQUEST_CODE_IMAGE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_productos);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Articulos");
         Declaracion();
         Spiner(1);
         btna.setOnClickListener(new View.OnClickListener() {
@@ -42,14 +57,8 @@ public class Productos extends AppCompatActivity {
                     case "Productos":
                         Producto();
                         break;
-                    case "Novedades":
-                        Categoria(1);
-                        break;
                     case "Ofertas":
-                        Categoria(2);
-                        break;
-                    case "Recomendados":
-                        Categoria(3);
+                        Ofertas();
                         break;
                     default:
                         Mensaje("Selecciona una opcion para continuar");
@@ -105,13 +114,13 @@ public class Productos extends AppCompatActivity {
                 t6.setInputType(TYPE_CLASS_TEXT);
                 t7.setInputType(TYPE_CLASS_TEXT);
                 break;
-            case "Novedades":
             case "Ofertas":
-            case "Recomendados":
                 t1.setHint("Nombre");
                 t1.setText("");
+                t2.setHint("Precio Nuevo");
+                t2.setText("");
                 t1.setVisibility(View.VISIBLE);
-                t2.setVisibility(View.GONE);
+                t2.setVisibility(View.VISIBLE);
                 t3.setVisibility(View.GONE);
                 t4.setVisibility(View.GONE);
                 t5.setVisibility(View.GONE);
@@ -136,7 +145,7 @@ public class Productos extends AppCompatActivity {
     private void Spiner(int v){
         switch (v){
             case 1:
-                String [] opciones1 = {"Selecciona una opcion","Productos", "Novedades", "Ofertas", "Recomendados"};
+                String [] opciones1 = {"Selecciona una opcion","Productos", "Ofertas"};
                 ArrayAdapter<String> adapter1= new ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,opciones1);
                 spiner.setAdapter(adapter1);
                 spiner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -158,7 +167,7 @@ public class Productos extends AppCompatActivity {
                 spc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        selected2= spc.getSelectedItem().toString();
+                        categoria= spc.getSelectedItem().toString();
                     }
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
@@ -174,7 +183,6 @@ public class Productos extends AppCompatActivity {
 
     private void Producto(){
         String T1,T2,T3,T4,T5,T6,T7;
-        int ID1,ID2,ID3,ID4,ID5;
         T1=t1.getText().toString().trim();
         T2=t2.getText().toString().trim();
         T3=t3.getText().toString().trim();
@@ -182,64 +190,31 @@ public class Productos extends AppCompatActivity {
         T5=t5.getText().toString().trim();
         T6=t6.getText().toString().trim();
         T7=t7.getText().toString().trim();
-        if(!T1.isEmpty() && !T2.isEmpty() && !T3.isEmpty() && !T4.isEmpty() && !T5.isEmpty() && !T6.isEmpty() && !T7.isEmpty()){
+        if(!T1.isEmpty() && !T2.isEmpty() && !T3.isEmpty() && !T4.isEmpty() && !T5.isEmpty() && !T6.isEmpty() && !T7.isEmpty() && !imageUrl.isEmpty()){
             try{
-                if(new Integer(T3)>=0 && new Integer(T4)>=0){
-                    if(Verificar("Arti",T1)){
-                        Mensaje("Articulo ya existente");
-                        t1.requestFocus();
-                    }else{
-                        try{
-                            Table="Talla";
-                            Nombre=T5;
-                            if(Verificar(Table,Nombre)){
-                                ID1 = GetID(Table,Nombre);
-                            }else{
-                                DB.AddNoteT(Table,Nombre);
-                                ID1 = GetID(Table,Nombre);
+                int TT3 = new Integer(T3);
+                int TT4 = new Integer(T4);
+                if(TT3>=0 && TT4>=0){
+                    query = databaseReference.orderByChild("nombre").equalTo(T1);
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                Mensaje("Articulo ya existente");
+                                t1.requestFocus();
+                            } else {
+                                Article nuevoArticulo = new Article(T1, T2, TT3, TT4,
+                                        T5, T6, T7, true, false, null, categoria, imageUrl);
+                                String nuevoArticuloId = databaseReference.push().getKey();
+                                databaseReference.child(nuevoArticuloId).setValue(nuevoArticulo);
+                                Mensaje("Producto guardado exitosamente");
                             }
-                            Table="Color";
-                            Nombre=T6;
-                            if(Verificar(Table,Nombre)){
-                                ID2 = GetID(Table,Nombre);
-                            }else{
-                                DB.AddNoteT(Table,Nombre);
-                                ID2 = GetID(Table,Nombre);
-                            }
-                            Table="Marca";
-                            Nombre=T7;
-                            if(Verificar(Table,Nombre)){
-                                ID3 = GetID(Table,Nombre);
-                            }else{
-                                DB.AddNoteT(Table,Nombre);
-                                ID3 = GetID(Table,Nombre);
-                            }
-                            Table="Categoria";
-                            Nombre=selected2;
-                            if(Verificar(Table,Nombre)){
-                                ID4 = GetID(Table,Nombre);
-                            }else{
-                                DB.AddNoteT(Table,Nombre);
-                                ID4 = GetID(Table,Nombre);
-                            }
-                            if(selected2!="Gym"){
-                                Table="Deporte";
-                                Nombre=selected2;
-                                if(Verificar(Table,Nombre)){
-                                    ID5 = GetID(Table,Nombre);
-                                }else{
-                                    DB.AddNoteT(Table,Nombre);
-                                    ID5 = GetID(Table,Nombre);
-                                }
-                            }else{
-                                ID5=-1;
-                            }
-                            DB.AddNoteT(T1,T2,T3,T4,ID1,ID2,ID3,ID4,ID5);
-                            Mensaje("Producto guardado exitosamente");
-                        }catch(Exception e){
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
                             Mensaje("Hubo un error en el guardado. Intentelo nuevamente");
                         }
-                    }
+                    });
                 }else{
                     Mensaje("Error. Revisa los datos e Intentelo Nuevamente");
                 }
@@ -252,49 +227,69 @@ public class Productos extends AppCompatActivity {
 
     }
 
-    private void Categoria(int v){
-        Table="Categoria";
-        Nombre=selected;
-        String T1=t1.getText().toString().trim();
-        int ID;
-        if(Verificar(Table,T1)){
-            if(Verificar(Table,Nombre)){
-                ID=GetID(Table,Nombre);
-            }else{
-                DB.AddNoteT(Table,Nombre);
-                ID = GetID(Table,Nombre);
+    private void Ofertas(){
+        String T1,T2;
+        T1=t1.getText().toString().trim();
+        T2=t2.getText().toString().trim();
+        query = databaseReference.orderByChild("nombre").equalTo(T1);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    Mensaje("Articulo no existente");
+                    t1.requestFocus();
+                } else {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String articleId = snapshot.getKey();
+                        DatabaseReference articleRef = databaseReference.child(articleId);
+                        articleRef.child("novedades").setValue(false);
+                        articleRef.child("ofertas").setValue(true);
+                        articleRef.child("precioNuevo").setValue(new Integer(T2));
+                    }
+                    Mensaje("Producto guardado exitosamente");
+                }
             }
-            DB.updateT(Table,Nombre,ID,T1);
-            Mensaje("Informacion actualizada");
-        }else{
-            Mensaje("Producto no encontrado, Intentelo nuevamente");
-        }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Mensaje("Hubo un error en el guardado. Intentelo nuevamente");
+            }
+        });
     }
 
-    private boolean Verificar(String Table, String Nombre){
-        Cursor c= DB.getNota(Table, Nombre);
-        String gettitle="";
-        if(c.moveToFirst()){
-            do{
-                gettitle=c.getString(1);
-            }while(c.moveToNext());
-        }
-        if(gettitle.equals(Nombre)){
-            return true;
-        }else{
-            return false;
-        }
+    public void foto(){
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent, REQUEST_CODE_IMAGE);
     }
 
-    private int GetID(String Table, String Nombre){
-        Cursor c= DB.getNota(Table, Nombre);
-        int ID=0;
-        if(c.moveToFirst()){
-            do{
-                ID= new Integer (c.getString(0));
-            }while(c.moveToNext());
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+        if (requestCode == REQUEST_CODE_IMAGE && resultCode == RESULT_OK) {
+            if (data != null) {
+                Uri imageUri = data.getData();
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                StorageReference imageReference = storageReference.child("articulos").child(imageUri.getLastPathSegment());
+                UploadTask uploadTask = imageReference.putFile(imageUri);
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Task<Uri> downloadUrlTask = imageReference.getDownloadUrl();
+                                downloadUrlTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri downloadUrl) {
+                                        imageUrl = downloadUrl.toString();
+                                    }
+                                });
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Mensaje("Ocurrio un error, intentalo nuevamente");
+                            }
+                        });
+            }
         }
-        return(ID);
     }
 
     public void Mensaje(String msj){
