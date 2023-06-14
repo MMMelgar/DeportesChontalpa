@@ -7,10 +7,13 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.ActivityResultRegistry;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import com.example.Deportes_Chontalpa.Productos;
 import com.example.Deportes_Chontalpa.R;
 import com.google.firebase.auth.FirebaseAuth;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 public class Perfil extends AppCompatActivity implements View.OnClickListener {
     private Button registerButton;
@@ -21,8 +24,8 @@ public class Perfil extends AppCompatActivity implements View.OnClickListener {
     private Button requestReturnButton;
     private Button logoutButton;
     private LinearLayout loggedInLayout;
-    private static final int REQUEST_LOGIN = 1;
-
+    private ActivityResultLauncher<Intent> registro;
+    private ActivityResultLauncher<Intent> login;
     private boolean isLoggedIn;
 
     @Override
@@ -38,7 +41,6 @@ public class Perfil extends AppCompatActivity implements View.OnClickListener {
         requestReturnButton = findViewById(R.id.request_return_button);
         logoutButton = findViewById(R.id.logout_button);
         loggedInLayout = findViewById(R.id.logged_in_layout);
-
         registerButton.setOnClickListener(this);
         loginButton.setOnClickListener(this);
         viewOrdersButton.setOnClickListener(this);
@@ -47,18 +49,23 @@ public class Perfil extends AppCompatActivity implements View.OnClickListener {
         requestReturnButton.setOnClickListener(this);
         logoutButton.setOnClickListener(this);
         isLoggedIn=false;
-
         updateUI();
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == REQUEST_LOGIN){
-            if(resultCode==RESULT_OK){
-                isLoggedIn=true;
-                updateUI();
-            }
-        }
+        ActivityResultRegistry registry = getActivityResultRegistry();
+        ActivityResultRegistry loginy = getActivityResultRegistry();
+        registro = registry.register("registroKey", new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        isLoggedIn = true;
+                        updateUI();
+                    }
+                });
+        login = loginy.register("loginKey", new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        isLoggedIn = true;
+                        updateUI();
+                    }
+                });
     }
 
     private void updateUI() {
@@ -71,11 +78,13 @@ public class Perfil extends AppCompatActivity implements View.OnClickListener {
             registerButton.setVisibility(View.VISIBLE);
             loginButton.setVisibility(View.VISIBLE);
             loggedInLayout.setVisibility(View.GONE);
+            animateView(loggedInLayout, 0f, 1f);
         }
     }
 
     private void animateView(View view, float startAlpha, float endAlpha) {
-        ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(view, "alpha", startAlpha, endAlpha);
+        ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(view, "alpha",
+                startAlpha, endAlpha);
         alphaAnimator.setDuration(500);
         alphaAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         alphaAnimator.start();
@@ -86,14 +95,14 @@ public class Perfil extends AppCompatActivity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.register_button:
                 Intent intentr = new Intent(Perfil.this, Registro.class);
-                startActivityForResult(intentr,REQUEST_LOGIN);
+                registro.launch(intentr);
                 break;
             case R.id.login_button:
                 Intent intentl = new Intent(Perfil.this, LoginActivity.class);
-                startActivityForResult(intentl,REQUEST_LOGIN);
+                login.launch(intentl);
                 break;
             case R.id.view_orders_button:
-                // Lógica para ver los pedidos realizados
+                startActivity(new Intent(Perfil.this, Productos.class));
                 break;
             case R.id.view_personal_info_button:
                 // Lógica para ver la información personal

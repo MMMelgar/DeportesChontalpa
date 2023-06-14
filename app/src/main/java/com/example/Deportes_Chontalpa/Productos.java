@@ -4,16 +4,22 @@ import static android.text.InputType.TYPE_CLASS_NUMBER;
 import static android.text.InputType.TYPE_CLASS_TEXT;
 
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.Deportes_Chontalpa.DB.AdminSQLiteOpenHelper;
@@ -36,11 +42,15 @@ public class Productos extends AppCompatActivity {
     Spinner spiner, spc;
     EditText t1,t2,t3,t4,t5,t6,t7;
     Button btna;
+    ImageButton btni;
     String selected="", categoria="", imageUrl;
     AdminSQLiteOpenHelper DB;
     DatabaseReference databaseReference;
     Query query;
     private static final int REQUEST_CODE_IMAGE = 1;
+    private static final String TAG="Articulos";
+    private ActivityResultLauncher<Intent> selectImageLauncher;
+    private Uri selectedImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +76,19 @@ public class Productos extends AppCompatActivity {
                 }
             }
         });
+        btni.setOnClickListener(view->{
+            selectImage();
+        });
+        selectImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+            if(result.getResultCode() == RESULT_OK){
+                Intent data = result.getData();
+                if (data != null){
+                    Uri imageUri = data.getData();
+                    showSelectedImage(imageUri);
+                }
+            }
+        });
     }
 
     private void Declaracion(){
@@ -79,6 +102,7 @@ public class Productos extends AppCompatActivity {
         t6= findViewById(R.id.etxt6);
         t7= findViewById(R.id.etxt7);
         btna= findViewById(R.id.agregar);
+        btni=findViewById(R.id.btnImage);
     }
 
     private void Seleccion(){
@@ -181,6 +205,17 @@ public class Productos extends AppCompatActivity {
         }
     }
 
+    private void showSelectedImage(Uri imageUri){
+        selectedImageUri = imageUri;
+        btni.setImageURI(imageUri);
+    }
+
+    private void selectImage(){
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        selectImageLauncher.launch(intent);
+    }
+
     private void Producto(){
         String T1,T2,T3,T4,T5,T6,T7;
         T1=t1.getText().toString().trim();
@@ -190,7 +225,7 @@ public class Productos extends AppCompatActivity {
         T5=t5.getText().toString().trim();
         T6=t6.getText().toString().trim();
         T7=t7.getText().toString().trim();
-        if(!T1.isEmpty() && !T2.isEmpty() && !T3.isEmpty() && !T4.isEmpty() && !T5.isEmpty() && !T6.isEmpty() && !T7.isEmpty() && !imageUrl.isEmpty()){
+        if(!T1.isEmpty() && !T2.isEmpty() && !T3.isEmpty() && !T4.isEmpty() && !T5.isEmpty() && !T6.isEmpty() && !T7.isEmpty() && selectedImageUri!=null){
             try{
                 int TT3 = new Integer(T3);
                 int TT4 = new Integer(T4);
@@ -203,6 +238,7 @@ public class Productos extends AppCompatActivity {
                                 Mensaje("Articulo ya existente");
                                 t1.requestFocus();
                             } else {
+                                saveImageToStorage();
                                 Article nuevoArticulo = new Article(T1, T2, TT3, TT4,
                                         T5, T6, T7, true, false, null, categoria, imageUrl);
                                 String nuevoArticuloId = databaseReference.push().getKey();
@@ -227,6 +263,19 @@ public class Productos extends AppCompatActivity {
 
     }
 
+    private void saveImageToStorage(){
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+        StorageReference imageReference = storageReference.child("articulos").child(selectedImageUri.getLastPathSegment());
+        UploadTask uploadTask = imageReference.putFile(selectedImageUri);
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+                    imageReference.getDownloadUrl().addOnSuccessListener(downloadUrl -> {
+                        imageUrl = downloadUrl.toString();
+                    });
+                })
+                .addOnFailureListener(e -> {
+                    Mensaje("Error al subir la imagen");
+                });
+    }
     private void Ofertas(){
         String T1,T2;
         T1=t1.getText().toString().trim();
@@ -254,42 +303,6 @@ public class Productos extends AppCompatActivity {
                 Mensaje("Hubo un error en el guardado. Intentelo nuevamente");
             }
         });
-    }
-
-    public void foto(){
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        startActivityForResult(intent, REQUEST_CODE_IMAGE);
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        super.onActivityResult(requestCode,resultCode,data);
-        if (requestCode == REQUEST_CODE_IMAGE && resultCode == RESULT_OK) {
-            if (data != null) {
-                Uri imageUri = data.getData();
-                StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-                StorageReference imageReference = storageReference.child("articulos").child(imageUri.getLastPathSegment());
-                UploadTask uploadTask = imageReference.putFile(imageUri);
-                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                Task<Uri> downloadUrlTask = imageReference.getDownloadUrl();
-                                downloadUrlTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri downloadUrl) {
-                                        imageUrl = downloadUrl.toString();
-                                    }
-                                });
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Mensaje("Ocurrio un error, intentalo nuevamente");
-                            }
-                        });
-            }
-        }
     }
 
     public void Mensaje(String msj){

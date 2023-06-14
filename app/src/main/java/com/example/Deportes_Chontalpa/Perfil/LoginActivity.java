@@ -6,8 +6,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.Deportes_Chontalpa.R;
 import com.example.Deportes_Chontalpa.SS2;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -42,10 +44,6 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
     }
-
-    /*public void Registro(View view) {
-        startActivity(new Intent(this, Registro.class));
-    }*/
 
     public void Recuperacion_Password(View view) {
         startActivity(new Intent(this, Recuperacion_Password.class));
@@ -88,32 +86,35 @@ public class LoginActivity extends AppCompatActivity {
     private void login(String email, String password) {
         TextView iTextError = findViewById(R.id.TextError);
 
-        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    setResult(RESULT_OK);
-                    finish();
-                } else {
-                    iTextError.setText("Ocurrió un error. Verifique los datos e intente nuevamente");
-                }
-            }
-        });
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(
+                this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Intent intent = new Intent();
+                            setResult(RESULT_OK,intent);
+                            finish();
+                        } else {
+                            iTextError.setText("Ocurrió un error. Verifique los datos e intente nuevamente");
+                        }
+                    }
+                });
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "signInWithCredential: success");
-                    startActivity(new Intent(LoginActivity.this, SS2.class));
-                    finish();
-                } else {
-                    Log.w(TAG, "signInWithCredential_failure", task.getException());
-                }
-            }
-        });
+        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(this,
+                new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "signInWithCredential: success");
+                            startActivity(new Intent(LoginActivity.this, SS2.class));
+                            finish();
+                        } else {
+                            Log.w(TAG, "signInWithCredential_failure", task.getException());
+                        }
+                    }
+                });
     }
 }

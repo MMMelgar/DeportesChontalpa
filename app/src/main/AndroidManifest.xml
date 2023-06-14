@@ -12,54 +12,58 @@
         android:theme="@style/Theme.DeportesChontalpa"
         tools:targetApi="31">
         <activity
-            android:name="com.example.Deportes_Chontalpa.SS0"
+            android:name=".Tenis"
+            android:exported="false" />
+        <activity
+            android:name=".SS0"
             android:exported="true"
             android:theme="@style/Theme.DeportesChontalpa.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.Deportes_Chontalpa.SS1"
+            android:name=".SS1"
             android:exported="false"
-            android:theme="@style/Theme.DeportesChontalpa.NoActionBar"/>
+            android:theme="@style/Theme.DeportesChontalpa.NoActionBar" />
         <activity
-            android:name="com.example.Deportes_Chontalpa.SS2"
+            android:name=".SS2"
             android:exported="false"
-            android:theme="@style/Theme.DeportesChontalpa.NoActionBar"/>
+            android:theme="@style/Theme.DeportesChontalpa.NoActionBar" />
         <activity
-            android:name="com.example.Deportes_Chontalpa.Home"
+            android:name=".Home"
             android:exported="false"
-            android:theme="@style/Theme.DeportesChontalpa.NoActionBar"/>
+            android:theme="@style/Theme.DeportesChontalpa.NoActionBar" />
         <activity
-            android:name="com.example.Deportes_Chontalpa.Productos"
+            android:name=".Productos"
             android:exported="false"
-            android:theme="@style/Theme.DeportesChontalpa.NoActionBar"/>
+            android:theme="@style/Theme.DeportesChontalpa.NoActionBar" />
         <activity
-            android:name="com.example.Deportes_Chontalpa.Carrito"
+            android:name=".Carrito"
             android:exported="false"
-            android:theme="@style/Theme.DeportesChontalpa.NoActionBar"/>
+            android:theme="@style/Theme.DeportesChontalpa.NoActionBar" />
         <activity
-            android:name="com.example.Deportes_Chontalpa.Busqueda"
+            android:name=".Busqueda"
             android:exported="false"
-            android:theme="@style/Theme.DeportesChontalpa.NoActionBar"/>
+            android:theme="@style/Theme.DeportesChontalpa.NoActionBar" />
         <activity
-            android:name="com.example.Deportes_Chontalpa.Perfil.LoginActivity"
+            android:name=".Perfil.LoginActivity"
             android:exported="false"
-            android:theme="@style/Theme.DeportesChontalpa.NoActionBar"/>
+            android:theme="@style/Theme.DeportesChontalpa.NoActionBar" />
         <activity
-            android:name="com.example.Deportes_Chontalpa.Perfil.Perfil"
+            android:name=".Perfil.Perfil"
             android:exported="false"
-            android:theme="@style/Theme.DeportesChontalpa.NoActionBar"/>
+            android:theme="@style/Theme.DeportesChontalpa.NoActionBar" />
         <activity
-            android:name="com.example.Deportes_Chontalpa.Perfil.Recuperacion_Password"
+            android:name=".Perfil.Recuperacion_Password"
             android:exported="false"
-            android:theme="@style/Theme.DeportesChontalpa.NoActionBar"/>
+            android:theme="@style/Theme.DeportesChontalpa.NoActionBar" />
         <activity
-            android:name="com.example.Deportes_Chontalpa.Perfil.Registro"
+            android:name=".Perfil.Registro"
             android:exported="false"
-            android:theme="@style/Theme.DeportesChontalpa.NoActionBar"/>
+            android:theme="@style/Theme.DeportesChontalpa.NoActionBar" />
     </application>
 
 </manifest>
