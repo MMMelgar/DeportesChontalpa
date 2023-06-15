@@ -4,6 +4,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class Article {
+    private String key;
     private String nombre;
     private String descripcion;
     private double precio;
@@ -21,8 +22,9 @@ public class Article {
     public Article() {
     }
 
-    public Article(String nombre, String descripcion, double precio, int articulosDisponibles, String talla, String color,
+    public Article(String key,String nombre, String descripcion, double precio, int articulosDisponibles, String talla, String color,
                    String marca, boolean novedades, boolean ofertas, Double precioNuevo, String categoria, String imageUrl) {
+        this.key=key;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;

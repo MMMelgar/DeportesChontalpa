@@ -130,6 +130,7 @@ public class Productos extends AppCompatActivity {
                 t6.setVisibility(View.VISIBLE);
                 t7.setVisibility(View.VISIBLE);
                 spc.setVisibility(View.VISIBLE);
+                btni.setVisibility(View.VISIBLE);
                 Spiner(2);
                 t2.setInputType(TYPE_CLASS_TEXT);
                 t3.setInputType(TYPE_CLASS_NUMBER);
@@ -151,6 +152,7 @@ public class Productos extends AppCompatActivity {
                 t6.setVisibility(View.GONE);
                 t7.setVisibility(View.GONE);
                 spc.setVisibility(View.GONE);
+                btni.setVisibility(View.GONE);
                 break;
             default:
                 t1.setVisibility(View.GONE);
@@ -161,6 +163,7 @@ public class Productos extends AppCompatActivity {
                 t6.setVisibility(View.GONE);
                 t7.setVisibility(View.GONE);
                 spc.setVisibility(View.GONE);
+                btni.setVisibility(View.GONE);
                 break;
         }
 
@@ -230,27 +233,30 @@ public class Productos extends AppCompatActivity {
                 int TT3 = new Integer(T3);
                 int TT4 = new Integer(T4);
                 if(TT3>=0 && TT4>=0){
-                    query = databaseReference.orderByChild("nombre").equalTo(T1);
-                    query.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                Mensaje("Articulo ya existente");
-                                t1.requestFocus();
-                            } else {
-                                saveImageToStorage();
-                                Article nuevoArticulo = new Article(T1, T2, TT3, TT4,
-                                        T5, T6, T7, true, false, null, categoria, imageUrl);
-                                String nuevoArticuloId = databaseReference.push().getKey();
-                                databaseReference.child(nuevoArticuloId).setValue(nuevoArticulo);
-                                Mensaje("Producto guardado exitosamente");
+                    try{
+                        query = databaseReference.child("Articulos").orderByChild("nombre").equalTo(T1);
+                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    Mensaje("Articulo ya existente");
+                                    t1.requestFocus();
+                                } else {
+                                    String key=databaseReference.child("Articulos").push().getKey();
+                                    saveImageToStorage();
+                                    Article nuevoArticulo = new Article(key,T1, T2, TT3, TT4,
+                                            T5, T6, T7, true, false, null, categoria, imageUrl);
+                                    nuevoArticulo.guardarArticulo();
+                                }
                             }
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Mensaje("Hubo un error en el guardado. Intentelo nuevamente");
-                        }
-                    });
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Mensaje("Hubo un error en el guardado. Intentelo nuevamente");
+                            }
+                        });
+                    }catch (Exception e){
+                        Mensaje("Ocurrio un eror al guardar, intentalo nuevamente");
+                    }
                 }else{
                     Mensaje("Error. Revisa los datos e Intentelo Nuevamente");
                 }
@@ -280,7 +286,7 @@ public class Productos extends AppCompatActivity {
         String T1,T2;
         T1=t1.getText().toString().trim();
         T2=t2.getText().toString().trim();
-        query = databaseReference.orderByChild("nombre").equalTo(T1);
+        query = databaseReference.child("Articulos").orderByChild("nombre").equalTo(T1);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
