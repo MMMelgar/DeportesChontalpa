@@ -2,12 +2,9 @@ package com.example.Deportes_Chontalpa;
 
 import static android.text.InputType.TYPE_CLASS_NUMBER;
 import static android.text.InputType.TYPE_CLASS_TEXT;
-
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,16 +14,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.Deportes_Chontalpa.DB.AdminSQLiteOpenHelper;
 import com.example.Deportes_Chontalpa.DB.Article;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,11 +40,8 @@ public class Productos extends AppCompatActivity {
     AdminSQLiteOpenHelper DB;
     DatabaseReference databaseReference;
     Query query;
-    private static final int REQUEST_CODE_IMAGE = 1;
-    private static final String TAG="Articulos";
     private ActivityResultLauncher<Intent> selectImageLauncher;
     private Uri selectedImageUri;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,26 +49,21 @@ public class Productos extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Articulos");
         Declaracion();
         Spiner(1);
-        btna.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DB = new AdminSQLiteOpenHelper(Productos.this);
-                switch (selected){
-                    case "Productos":
-                        Producto();
-                        break;
-                    case "Ofertas":
-                        Ofertas();
-                        break;
-                    default:
-                        Mensaje("Selecciona una opcion para continuar");
-                        break;
-                }
+        btna.setOnClickListener(v -> {
+            DB = new AdminSQLiteOpenHelper(Productos.this);
+            switch (selected){
+                case "Productos":
+                    Producto();
+                    break;
+                case "Ofertas":
+                    Ofertas();
+                    break;
+                default:
+                    Mensaje("Selecciona una opcion para continuar");
+                    break;
             }
         });
-        btni.setOnClickListener(view->{
-            selectImage();
-        });
+        btni.setOnClickListener(v-> selectImage());
         selectImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
             if(result.getResultCode() == RESULT_OK){
@@ -90,7 +75,7 @@ public class Productos extends AppCompatActivity {
             }
         });
     }
-
+    
     private void Declaracion(){
         spiner= findViewById(R.id.spinner);
         spc= findViewById(R.id.spncat);
@@ -104,7 +89,7 @@ public class Productos extends AppCompatActivity {
         btna= findViewById(R.id.agregar);
         btni=findViewById(R.id.btnImage);
     }
-
+    
     private void Seleccion(){
         switch (selected){
             case "Productos":
@@ -168,12 +153,12 @@ public class Productos extends AppCompatActivity {
         }
 
     }
-
+    
     private void Spiner(int v){
         switch (v){
             case 1:
                 String [] opciones1 = {"Selecciona una opcion","Productos", "Ofertas"};
-                ArrayAdapter<String> adapter1= new ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,opciones1);
+                ArrayAdapter<String> adapter1= new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,opciones1);
                 spiner.setAdapter(adapter1);
                 spiner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -189,7 +174,7 @@ public class Productos extends AppCompatActivity {
                 break;
             case 2:
                 String [] opciones2={"Selecciona una opcion","Gym", "Tenis", "Baloncesto", "Futbol", "Otros"};
-                ArrayAdapter<String> adapter2= new ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,opciones2);
+                ArrayAdapter<String> adapter2= new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,opciones2);
                 spc.setAdapter(adapter2);
                 spc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -230,8 +215,8 @@ public class Productos extends AppCompatActivity {
         T7=t7.getText().toString().trim();
         if(!T1.isEmpty() && !T2.isEmpty() && !T3.isEmpty() && !T4.isEmpty() && !T5.isEmpty() && !T6.isEmpty() && !T7.isEmpty() && selectedImageUri!=null){
             try{
-                int TT3 = new Integer(T3);
-                int TT4 = new Integer(T4);
+                int TT3 = Integer.parseInt(T3);
+                int TT4 = Integer.parseInt(T4);
                 if(TT3>=0 && TT4>=0){
                     try{
                         query = databaseReference.child("Articulos").orderByChild("nombre").equalTo(T1);
@@ -273,15 +258,9 @@ public class Productos extends AppCompatActivity {
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
         StorageReference imageReference = storageReference.child("articulos").child(selectedImageUri.getLastPathSegment());
         UploadTask uploadTask = imageReference.putFile(selectedImageUri);
-        uploadTask.addOnSuccessListener(taskSnapshot -> {
-                    imageReference.getDownloadUrl().addOnSuccessListener(downloadUrl -> {
-                        imageUrl = downloadUrl.toString();
-                    });
-                })
-                .addOnFailureListener(e -> {
-                    Mensaje("Error al subir la imagen");
-                });
+        uploadTask.addOnSuccessListener(taskSnapshot -> imageReference.getDownloadUrl().addOnSuccessListener(downloadUrl -> imageUrl = downloadUrl.toString())).addOnFailureListener(e -> Mensaje("Error al subir la imagen"));
     }
+    
     private void Ofertas(){
         String T1,T2;
         T1=t1.getText().toString().trim();
@@ -296,10 +275,14 @@ public class Productos extends AppCompatActivity {
                 } else {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         String articleId = snapshot.getKey();
-                        DatabaseReference articleRef = databaseReference.child(articleId);
-                        articleRef.child("novedades").setValue(false);
-                        articleRef.child("ofertas").setValue(true);
-                        articleRef.child("precioNuevo").setValue(new Integer(T2));
+                        if(articleId!=null){
+                            DatabaseReference articleRef = databaseReference.child(articleId);
+                            articleRef.child("novedades").setValue(false);
+                            articleRef.child("ofertas").setValue(true);
+                            articleRef.child("precioNuevo").setValue(Integer.parseInt(T2));
+                        }else{
+                            Mensaje("Ocurrio un error, intentalo nuevamente");
+                        }
                     }
                     Mensaje("Producto guardado exitosamente");
                 }
