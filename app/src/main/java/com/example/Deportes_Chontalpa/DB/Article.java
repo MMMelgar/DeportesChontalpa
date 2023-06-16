@@ -18,7 +18,6 @@ public class Article {
     private String categoria;
     private String imageUrl;
 
-    // Constructor vacío necesario para Firebase
     public Article() {
     }
 

@@ -18,7 +18,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.Deportes_Chontalpa.DB.AdminSQLiteOpenHelper;
+import androidx.core.content.ContextCompat;
 import com.example.Deportes_Chontalpa.DB.Article;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,7 +37,6 @@ public class Productos extends AppCompatActivity {
     Button btna;
     ImageButton btni;
     String selected="", categoria="", imageUrl;
-    AdminSQLiteOpenHelper DB;
     DatabaseReference databaseReference;
     Query query;
     private ActivityResultLauncher<Intent> selectImageLauncher;
@@ -50,7 +49,6 @@ public class Productos extends AppCompatActivity {
         Declaracion();
         Spiner(1);
         btna.setOnClickListener(v -> {
-            DB = new AdminSQLiteOpenHelper(Productos.this);
             switch (selected){
                 case "Productos":
                     Producto();
@@ -227,11 +225,7 @@ public class Productos extends AppCompatActivity {
                                     Mensaje("Articulo ya existente");
                                     t1.requestFocus();
                                 } else {
-                                    String key=databaseReference.child("Articulos").push().getKey();
-                                    saveImageToStorage();
-                                    Article nuevoArticulo = new Article(key,T1, T2, TT3, TT4,
-                                            T5, T6, T7, true, false, null, categoria, imageUrl);
-                                    nuevoArticulo.guardarArticulo();
+                                    saveBD(T1, T2, TT3, TT4, T5, T6, T7);
                                 }
                             }
                             @Override
@@ -254,11 +248,17 @@ public class Productos extends AppCompatActivity {
 
     }
 
-    private void saveImageToStorage(){
+    private void saveBD(String T1,String T2, int TT3, int TT4, String T5, String T6, String T7){
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
         StorageReference imageReference = storageReference.child("articulos").child(selectedImageUri.getLastPathSegment());
         UploadTask uploadTask = imageReference.putFile(selectedImageUri);
-        uploadTask.addOnSuccessListener(taskSnapshot -> imageReference.getDownloadUrl().addOnSuccessListener(downloadUrl -> imageUrl = downloadUrl.toString())).addOnFailureListener(e -> Mensaje("Error al subir la imagen"));
+        uploadTask.addOnSuccessListener(taskSnapshot -> imageReference.getDownloadUrl().addOnSuccessListener(downloadUrl -> {
+                imageUrl = downloadUrl.toString();
+                String key = databaseReference.child("Articulos").push().getKey();
+                Article nuevoArticulo = new Article(key, T1, T2, TT3, TT4, T5, T6, T7, true, false, null, categoria, imageUrl);
+                nuevoArticulo.guardarArticulo();
+                Limpieza();
+            }).addOnFailureListener(e -> Mensaje("Error al obtener la URL de la imagen"))).addOnFailureListener(e -> Mensaje("Error al subir la imagen"));
     }
     
     private void Ofertas(){
@@ -292,6 +292,18 @@ public class Productos extends AppCompatActivity {
                 Mensaje("Hubo un error en el guardado. Intentelo nuevamente");
             }
         });
+    }
+
+    private void Limpieza(){
+        Mensaje("Guardado");
+        btni.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.baseline_image_24));
+        t1.setText("");
+        t2.setText("");
+        t3.setText("");
+        t4.setText("");
+        t5.setText("");
+        t6.setText("");
+        t7.setText("");
     }
 
     public void Mensaje(String msj){

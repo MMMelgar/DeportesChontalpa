@@ -1,7 +1,6 @@
 package com.example.Deportes_Chontalpa;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -11,72 +10,62 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.Deportes_Chontalpa.DB.AdminSQLiteOpenHelper;
+import com.example.Deportes_Chontalpa.DB.Article;
 import com.example.Deportes_Chontalpa.DB.ListaAdapterCat;
-import com.example.Deportes_Chontalpa.Entidades.DbRegistros;
 import com.example.Deportes_Chontalpa.Perfil.Perfil;
-import com.google.firebase.FirebaseApp;
-
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Home extends AppCompatActivity {
-
-    private ImageButton btnMenu, btnCarrito, btnPerfil, btnBusqueda;
     private Spinner categoria, deporte;
-    private String selected, Nombre;
-    private GridView lista;
-    AdminSQLiteOpenHelper DB;
-    private ListaAdapterCat adaptador;
-
+    private String selected;
+    private ListaAdapterCat adapter;
+    private List<Article> articulosList;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FirebaseApp.initializeApp(this);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Articulos");
         setContentView(R.layout.activity_home);
         Botones();
         Spinners();
-        Lista();
+        Grid();
     }
 
     private void Botones(){
+        ImageButton btnMenu, btnCarrito, btnPerfil;
         btnMenu = findViewById(R.id.btnMenu);
         btnCarrito = findViewById(R.id.btnCarrito);
         btnPerfil = findViewById(R.id.btnPerfil);
 
-        btnMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Home.this, Home.class));
-                finish();
-            }
+        btnMenu.setOnClickListener(v -> {
+            startActivity(new Intent(Home.this, Home.class));
+            finish();
         });
 
-        btnCarrito.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Home.this, Carrito.class));
-            }
-        });
+        btnCarrito.setOnClickListener(v -> startActivity(new Intent(Home.this, Carrito.class)));
 
-        btnPerfil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Home.this, Perfil.class));
-            }
-        });
+        btnPerfil.setOnClickListener(v -> startActivity(new Intent(Home.this, Perfil.class)));
     }
 
     private void Spinners(){
-        categoria=(Spinner) findViewById(R.id.spn1);
-        deporte=(Spinner) findViewById(R.id.spn2);
-        String [] opciones1={"Catalogo", "Novedades", "Ofertas", "Recomendados", "Deportes"};
+        categoria=findViewById(R.id.spn1);
+        deporte=findViewById(R.id.spn2);
+        String [] opciones1={"Catalogo", "Novedades", "Ofertas", "Gym", "Deportes"};
         String [] opciones2={"Deportes", "Tenis", "Baloncesto", "Futbol", "Otros"};
-        ArrayAdapter<String> adapter1= new ArrayAdapter<String>(
+        ArrayAdapter<String> adapter1= new ArrayAdapter<>(
                 this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
                 opciones1);
-        ArrayAdapter<String> adapter2= new ArrayAdapter<String>(
+        ArrayAdapter<String> adapter2= new ArrayAdapter<>(
                 this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
                 opciones2);
         categoria.setAdapter(adapter1);
@@ -87,19 +76,83 @@ public class Home extends AppCompatActivity {
                 selected=categoria.getSelectedItem().toString();
                 switch (selected){
                     case "Novedades":
-                        //startActivity(new Intent(Home.this, Novedades.class));
+                        deporte.setVisibility(View.GONE);
+                        Query queryN= databaseReference.orderByChild("novedades").equalTo(true);
+                        queryN.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                articulosList.clear();
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    Article articulo = snapshot.getValue(Article.class);
+                                    articulosList.add(articulo);
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Mensaje("Hubo un error en la base de datos");
+                            }
+                        });
                         break;
                     case "Ofertas":
-                        //startActivity(new Intent(Home.this, Ofertas.class));
+                        deporte.setVisibility(View.GONE);
+                        Query queryO= databaseReference.orderByChild("ofertas").equalTo(true);
+                        queryO.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                articulosList.clear();
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    Article articulo = snapshot.getValue(Article.class);
+                                    articulosList.add(articulo);
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Mensaje("Hubo un error en la base de datos");
+                            }
+                        });
                         break;
-                    case "Recomendados":
-                        //startActivity(new Intent(Home.this, Recomendados.class));
+                    case "Gym":
+                        deporte.setVisibility(View.GONE);
+                        Query queryG= databaseReference.orderByChild("categoria").equalTo("Gym");
+                        queryG.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                articulosList.clear();
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    Article articulo = snapshot.getValue(Article.class);
+                                    articulosList.add(articulo);
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Mensaje("Hubo un error en la base de datos");
+                            }
+                        });
                         break;
                     case "Deportes":
                         deporte.setVisibility(View.VISIBLE);
                         break;
                     case "Catalogo":
                         deporte.setVisibility(View.GONE);
+                        databaseReference.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                articulosList.clear();
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    Article articulo = snapshot.getValue(Article.class);
+                                    articulosList.add(articulo);
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Mensaje("Hubo un error en la base de datos");
+                            }
+                        });
                 }
             }
             @Override
@@ -112,16 +165,76 @@ public class Home extends AppCompatActivity {
                 selected=deporte.getSelectedItem().toString();
                 switch (selected){
                     case "Tenis":
-                        //startActivity(new Intent(Home.this, Tenis.class));
+                        Query queryT= databaseReference.orderByChild("categoria").equalTo("Tenis");
+                        queryT.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                articulosList.clear();
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    Article articulo = snapshot.getValue(Article.class);
+                                    articulosList.add(articulo);
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Mensaje("Hubo un error en la base de datos");
+                            }
+                        });
                         break;
                     case "Baloncesto":
-                        //startActivity(new Intent(Home.this, Baloncesto.class));
+                        Query queryB= databaseReference.orderByChild("categoria").equalTo("Baloncesto");
+                        queryB.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                articulosList.clear();
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    Article articulo = snapshot.getValue(Article.class);
+                                    articulosList.add(articulo);
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Mensaje("Hubo un error en la base de datos");
+                            }
+                        });
                         break;
                     case "Futbol":
-                        //startActivity(new Intent(Home.this, Futbol.class));
+                        Query queryF= databaseReference.orderByChild("categoria").equalTo("Futbol");
+                        queryF.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                articulosList.clear();
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    Article articulo = snapshot.getValue(Article.class);
+                                    articulosList.add(articulo);
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Mensaje("Hubo un error en la base de datos");
+                            }
+                        });
                         break;
                     case "Otros":
-                        //startActivity(new Intent(Home.this, Otros.class));
+                        Query queryO= databaseReference.orderByChild("categoria").equalTo("Otros");
+                        queryO.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                articulosList.clear();
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    Article articulo = snapshot.getValue(Article.class);
+                                    articulosList.add(articulo);
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Mensaje("Hubo un error en la base de datos");
+                            }
+                        });
                         break;
                 }
             }
@@ -131,48 +244,22 @@ public class Home extends AppCompatActivity {
         });
     }
 
-    private void Lista(){
-        lista=(GridView) findViewById(R.id.Lista);
-        lista.setAdapter(adapter());
-        lista.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                try{
-                    DbRegistros m= (DbRegistros) adaptador.getItem(position);
-                    Nombre=m.getNombre();
-                    //Inserta logica para mandar a la pantalla para ver cada articulo
-                }catch (Exception e){
-                    Mensaje("Ha ocurrido un error, intentalo, nuevamente");
-                }
+    private void Grid(){
+        GridView gridView=findViewById(R.id.Lista);
+        gridView.setAdapter(adapter());
+        gridView.setOnItemClickListener((parent, view, position, id) -> {
+            try{
+                //Inserta logica para mandar a la pantalla para ver cada articulo
+            }catch (Exception e){
+                Mensaje("Ha ocurrido un error, intentalo, nuevamente");
             }
         });
     }
 
     private ListaAdapterCat adapter(){
-        DB = new AdminSQLiteOpenHelper(this);
-        ArrayList<DbRegistros> modelo = new ArrayList<>();
-        DbRegistros m;
-        Cursor c=DB.getNotas("Arti");
-        if(!c.moveToLast()){
-            m=new DbRegistros();
-            m.setId("0");
-            m.setNombre("No hay datos");
-            m.setPrecio("$0");
-            modelo.add(m);
-            m.setId("1");
-            m.setNombre("No hay datos");
-            m.setPrecio("$0");
-            modelo.add(m);
-        }else{
-            do{
-                m=new DbRegistros();
-                m.setId(c.getString(0));
-                m.setNombre(c.getString(1));
-                m.setPrecio(c.getString(3));
-            }while(c.moveToPrevious());
-        }
-        adaptador=new ListaAdapterCat(this, modelo);
-        return adaptador;
+        articulosList = new ArrayList<>();
+        adapter=new ListaAdapterCat(this,articulosList);
+        return adapter;
     }
 
     private void Mensaje(String msj){

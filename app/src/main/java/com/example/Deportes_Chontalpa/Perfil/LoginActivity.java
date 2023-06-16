@@ -6,21 +6,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.Deportes_Chontalpa.R;
-import com.example.Deportes_Chontalpa.SS2;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
@@ -63,11 +57,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    /*public void signInGoogle(View view) {
-        Intent signInIntent = googleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }*/
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -87,16 +76,13 @@ public class LoginActivity extends AppCompatActivity {
         TextView iTextError = findViewById(R.id.TextError);
 
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(
-                this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Intent intent = new Intent();
-                            setResult(RESULT_OK,intent);
-                            finish();
-                        } else {
-                            iTextError.setText("Ocurrió un error. Verifique los datos e intente nuevamente");
-                        }
+                this, task -> {
+                    if (task.isSuccessful()) {
+                        Intent intent = new Intent();
+                        setResult(RESULT_OK,intent);
+                        finish();
+                    } else {
+                        iTextError.setText("Ocurrió un error. Verifique los datos e intente nuevamente");
                     }
                 });
     }
@@ -104,16 +90,11 @@ public class LoginActivity extends AppCompatActivity {
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener(this,
-                new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "signInWithCredential: success");
-                            startActivity(new Intent(LoginActivity.this, SS2.class));
-                            finish();
-                        } else {
-                            Log.w(TAG, "signInWithCredential_failure", task.getException());
-                        }
+                task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "signInWithCredential: success");
+                    } else {
+                        Log.w(TAG, "signInWithCredential_failure", task.getException());
                     }
                 });
     }

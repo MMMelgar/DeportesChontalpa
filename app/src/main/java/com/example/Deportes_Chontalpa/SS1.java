@@ -12,11 +12,9 @@ public class SS1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ss1);
 
-        new Handler().postDelayed(new Runnable(){
-            public void run(){
-                startActivity(new Intent(SS1.this, Home.class));
-                finish();
-            }
+        new Handler().postDelayed(() -> {
+            startActivity(new Intent(SS1.this, Home.class));
+            finish();
         },4000);
     }
 }

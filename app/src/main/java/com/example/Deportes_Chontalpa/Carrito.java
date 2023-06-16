@@ -1,23 +1,16 @@
 package com.example.Deportes_Chontalpa;
 
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+/*import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.ArrayList;*/
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.Deportes_Chontalpa.R;
-import com.example.Deportes_Chontalpa.DB.AdminSQLiteOpenHelper;
-import com.example.Deportes_Chontalpa.DB.ListaAdapter;
-import com.example.Deportes_Chontalpa.Entidades.DbRegistros;
-
-import java.util.ArrayList;
 
 public class Carrito extends AppCompatActivity {
-
+/*
     AdminSQLiteOpenHelper DB;
     Cursor cursor;
     ListView lista;
@@ -35,7 +28,7 @@ public class Carrito extends AppCompatActivity {
 
     /**
      * Metodo encargado de hacer la conexion con la BD
-     */
+     *//*
     public void ejecutarQuery() {
         DB = new AdminSQLiteOpenHelper(this);
         Cursor c=DB.getNotas("Carrito");
@@ -90,11 +83,11 @@ public class Carrito extends AppCompatActivity {
             }
         }while(c.moveToPrevious());
         return modelo;
-    }
+    }*/
 
     /**
      * Metodo encargado de definir los datos del ListView correspondiente
-     */
+     *//*
     public void definirLista() {
         try {
             ejecutarQuery();
@@ -120,7 +113,7 @@ public class Carrito extends AppCompatActivity {
             Toast.makeText(this, "NO HAY ARTICULOS EN EL CARRITO",
                     Toast.LENGTH_LONG).show();
         }
-    }
+    }*/
 
     /**
      * //limpiar el carrito
