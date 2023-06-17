@@ -13,8 +13,8 @@ import java.util.List;
 
 public class ListaAdapterCat extends BaseAdapter {
 
-    private Context context;
-    private List<Article> articulosList;
+    private final Context context;
+    private final List<Article> articulosList;
 
     public ListaAdapterCat(Context context, List<Article> articulosList){
         this.context= context;

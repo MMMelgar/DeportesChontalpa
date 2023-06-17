@@ -11,6 +11,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
 import com.example.Deportes_Chontalpa.R;
 
 public class Registro extends AppCompatActivity {
@@ -55,7 +57,7 @@ public class Registro extends AppCompatActivity {
                         map.put("Email", email);
                         map.put("Contraseña", contraseña);
 
-                        String id = firebaseAuth.getCurrentUser().getUid();
+                        String id = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
                         databaseReference.child("Users").child(id).setValue(map)
                                 .addOnCompleteListener(task2 -> {
                                     if (task2.isSuccessful()) {

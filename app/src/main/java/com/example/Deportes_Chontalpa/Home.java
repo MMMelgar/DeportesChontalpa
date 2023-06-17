@@ -249,11 +249,18 @@ public class Home extends AppCompatActivity {
         gridView.setAdapter(adapter());
         gridView.setOnItemClickListener((parent, view, position, id) -> {
             try{
-                //Inserta logica para mandar a la pantalla para ver cada articulo
+                Article articulo = articulosList.get(position);
+                navigateToArticuloDetalle(articulo);
             }catch (Exception e){
                 Mensaje("Ha ocurrido un error, intentalo, nuevamente");
             }
         });
+    }
+
+    private void navigateToArticuloDetalle(Article articulo) {
+        Intent intent = new Intent(Home.this, ArticuloDetalleActivity.class);
+        intent.putExtra("articulo", articulo);
+        startActivity(intent);
     }
 
     private ListaAdapterCat adapter(){

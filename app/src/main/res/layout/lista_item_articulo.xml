@@ -11,9 +11,9 @@
 
         <ImageView
             android:id="@+id/Imagen"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            android:layout_marginStart="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
             android:layout_marginTop="10dp" />
 
         <TextView
@@ -117,5 +117,14 @@
                 android:textSize="15dp"
                 android:text="Oferta" />
         </LinearLayout>
+        <Button
+            android:id="@+id/agregarCarritoButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_alignParentBottom="true"
+            android:text="Agregar al Carrito"
+            android:textColor="@android:color/white"
+            android:background="@android:color/black" />
     </LinearLayout>
 </LinearLayout>

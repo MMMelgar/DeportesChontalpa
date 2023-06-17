@@ -1,6 +1,7 @@
 package com.example.Deportes_Chontalpa.Perfil;
 
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,14 +19,9 @@ import com.google.firebase.auth.FirebaseAuth;
 public class Perfil extends AppCompatActivity implements View.OnClickListener {
     private Button registerButton;
     private Button loginButton;
-    private Button viewOrdersButton;
-    private Button viewPersonalInfoButton;
-    private Button configurationButton;
-    private Button requestReturnButton;
-    private Button logoutButton;
+    private Button viewOrdersButton, viewPersonalInfoButton, configurationButton, requestReturnButton, logoutButton;
     private LinearLayout loggedInLayout;
-    private ActivityResultLauncher<Intent> registro;
-    private ActivityResultLauncher<Intent> login;
+    private ActivityResultLauncher<Intent> registro, login;
     private boolean isLoggedIn;
 
     @Override
@@ -90,6 +86,7 @@ public class Perfil extends AppCompatActivity implements View.OnClickListener {
         alphaAnimator.start();
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

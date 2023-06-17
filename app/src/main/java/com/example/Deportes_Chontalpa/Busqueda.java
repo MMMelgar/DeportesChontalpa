@@ -27,12 +27,9 @@ public class Busqueda extends AppCompatActivity {
             }
         });
 
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                navigateToHome();
-                return false;
-            }
+        searchView.setOnCloseListener(() -> {
+            navigateToHome();
+            return false;
         });
     }
 

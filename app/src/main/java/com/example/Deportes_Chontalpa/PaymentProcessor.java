@@ -32,7 +32,7 @@ public class PaymentProcessor {
                     while ((line = br.readLine()) != null) {
                         response.append(line);
                     }
-                    System.out.println("Pago realizado con éxito: " + response.toString());
+                    System.out.println("Pago realizado con éxito: " + response);
                 }
             } else {
                 System.out.println("Error en el pago. Código de respuesta: " + responseCode);

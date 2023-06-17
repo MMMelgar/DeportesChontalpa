@@ -12,7 +12,8 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
-        android:src="@drawable/imagen" />
+        android:src="@drawable/imagen"
+        android:contentDescription="@string/imagen_producto"/>
 
     <TextView
         android:id="@+id/txt_nombre"
@@ -22,7 +23,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
+        android:text=""
         android:textSize="24sp"
         android:textStyle="bold"
         app:fontFamily="sans-serif" />
@@ -35,7 +36,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
+        android:text=""
         android:textSize="18sp"
         android:textStyle="bold"
         app:fontFamily="serif" />
@@ -47,7 +48,7 @@
         android:layout_below="@id/txt_desc"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:text="TextView"
+        android:text=""
         android:textSize="18sp"
         app:fontFamily="sans-serif" />
 
@@ -57,41 +58,40 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/txt_precio"
         android:layout_marginTop="8dp"
-        android:text="Cantidad"
+        android:text="@string/cantidad"
         android:textSize="24sp" />
 
     <Button
         android:id="@+id/btn_menos"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_below="@id/txt_cantidad_label"
         android:layout_marginTop="8dp"
         android:onClick="restar"
-        android:text="-"
+        android:text="@string/button_eliminar"
         android:textAllCaps="false"
         android:textSize="24sp" />
 
     <TextView
         android:id="@+id/txt_cantidad"
-        android:layout_width="41dp"
-        android:layout_height="45dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignTop="@id/btn_menos"
         android:layout_toEndOf="@id/btn_menos"
         android:ems="10"
-        android:inputType="number"
-        android:text="1"
+        android:text=""
         android:textSize="30sp"
         android:textStyle="bold"
         android:typeface="sans" />
 
     <Button
         android:id="@+id/btn_mas"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignTop="@id/txt_cantidad"
         android:layout_toEndOf="@id/txt_cantidad"
         android:onClick="agregar"
-        android:text="+"
+        android:text="@string/button_agregar"
         android:textStyle="bold" />
 
     <Button
@@ -102,6 +102,6 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="17dp"
         android:onClick="agregarcarrito"
-        android:text="Enviar al carrito" />
+        android:text="@string/enviar_al_carrito" />
 
 </RelativeLayout>
