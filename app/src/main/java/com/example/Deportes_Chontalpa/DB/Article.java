@@ -162,7 +162,9 @@ public class Article implements Parcelable {
         dest.writeString(marca);
         dest.writeString(Boolean.toString(novedades));
         dest.writeString(Boolean.toString(ofertas));
-        dest.writeString(Double.toString(precioNuevo));
+        if (precioNuevo!=null){
+            dest.writeString(Double.toString(precioNuevo));
+        }
         dest.writeString(categoria);
         dest.writeString(imageUrl);
     }
@@ -178,7 +180,9 @@ public class Article implements Parcelable {
         marca = in.readString();
         novedades = Boolean.parseBoolean(in.readString());
         ofertas = Boolean.parseBoolean(in.readString());
-        precioNuevo= Double.parseDouble(in.readString());
+        if (precioNuevo!=null){
+            precioNuevo= Double.parseDouble(in.readString());
+        }
         categoria = in.readString();
         imageUrl = in.readString();
     }

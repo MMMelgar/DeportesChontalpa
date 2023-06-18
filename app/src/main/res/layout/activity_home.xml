@@ -35,14 +35,14 @@
             <!-- Barra de búsqueda -->
             <EditText
                 android:id="@+id/searchBar"
-                android:layout_width="45dp"
+                android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="10dp"
-                android:layout_weight="@integer/material_motion_duration_short_1"
+                android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:hint="@string/buscar"
                 android:inputType="text"
-                android:textColor="@android:color/white" />
+                android:textColorHint="@color/white"/>
 
             <!-- Botón de perfil -->
             <ImageButton
@@ -66,38 +66,37 @@
             android:orientation="horizontal"
             android:layout_marginTop="50dp"
             android:background="@color/black">
+
             <Spinner
                 android:id="@+id/spn1"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_marginStart="48dp"
-                android:background="@android:color/transparent"
                 android:dropDownWidth="wrap_content"
-                android:spinnerMode="dropdown"
-                android:textColor="@color/white"/>
+                android:forceDarkAllowed="true"
+                android:background="@drawable/spinner_rounded_border" />
             <Spinner
                 android:id="@+id/spn2"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:layout_marginStart="45dp"
-                android:layout_marginEnd="25dp"
-                android:background="@android:color/transparent"
-                android:spinnerMode="dropdown"
-                android:visibility="visible"
-                android:textColor="@color/white"/>
+                android:layout_marginStart="48dp"
+                android:dropDownWidth="wrap_content"
+                android:forceDarkAllowed="true"
+                android:background="@drawable/spinner_rounded_border" />
         </LinearLayout>
+
         <GridView
             android:id="@+id/Lista"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:verticalSpacing="8dp"
-            android:horizontalSpacing="8dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="87dp"
             android:background="@color/white"
-            android:padding="8dp"
             android:gravity="center"
+            android:horizontalSpacing="8dp"
+            android:numColumns="2"
+            android:padding="8dp"
             android:textColor="@color/white"
             android:textSize="20sp"
-            android:numColumns="2"/>
+            android:verticalSpacing="8dp" />
     </RelativeLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

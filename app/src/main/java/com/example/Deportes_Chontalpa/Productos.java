@@ -274,15 +274,10 @@ public class Productos extends AppCompatActivity {
                     t1.requestFocus();
                 } else {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        String articleId = snapshot.getKey();
-                        if(articleId!=null){
-                            DatabaseReference articleRef = databaseReference.child(articleId);
-                            articleRef.child("novedades").setValue(false);
-                            articleRef.child("ofertas").setValue(true);
-                            articleRef.child("precioNuevo").setValue(Integer.parseInt(T2));
-                        }else{
-                            Mensaje("Ocurrio un error, intentalo nuevamente");
-                        }
+                        DatabaseReference articleRef = snapshot.getRef();
+                        articleRef.child("novedades").setValue(false);
+                        articleRef.child("ofertas").setValue(true);
+                        articleRef.child("precioNuevo").setValue(Integer.parseInt(T2));
                     }
                     Mensaje("Producto guardado exitosamente");
                 }

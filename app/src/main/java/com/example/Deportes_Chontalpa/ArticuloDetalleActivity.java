@@ -46,19 +46,19 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
             Picasso.get().load(articulo.getImageUrl()).into(imageView);
             nombre.setText(articulo.getNombre());
             descripcion.setText(articulo.getDescripcion());
-            talla.setText(articulo.getTalla());
-            color.setText(articulo.getColor());
-            marca.setText(articulo.getMarca());
+            talla.setText("Talla: " + articulo.getTalla());
+            color.setText("Color: " + articulo.getColor());
+            marca.setText("Marca: " + articulo.getMarca());
             if(articulo.getArticulosDisponibles()>0){
                 disponible.setText("Disponible");
                 disponible.setTextColor(Color.GREEN);
                 if(articulo.isOfertas()){
                     oferta.setText("OFERTA");
-                    precio.setText(Double.toString(articulo.getPrecioNuevo()));
+                    precio.setText("Precio: " + articulo.getPrecioNuevo());
                     precio.setTextColor(Color.GREEN);
                 }else{
                     oferta.setVisibility(View.GONE);
-                    precio.setText(Double.toString(articulo.getPrecio()));
+                    precio.setText("Precio: " + articulo.getPrecio());
                     precio.setTextColor(Color.BLACK);
                 }
             }else{
@@ -71,6 +71,8 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
             agregarCarritoButton.setOnClickListener(v -> {
                 // Aquí puedes realizar la acción correspondiente al agregar al carrito
             });
+        }else{
+            finish();
         }
     }
 }
