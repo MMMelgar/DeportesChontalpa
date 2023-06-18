@@ -29,6 +29,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ArticuloDetalleActivity extends AppCompatActivity {
@@ -103,16 +104,22 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
             if(SessionManager.getInstance().getAdmi()){
                 Mensaje("Solo los usuarios pueden añadir articulos al carrito");
             }else{
-                query = databaseReference.child("Users").orderByChild("correo").equalTo(SessionManager.getInstance().getUserEmail());
+                String userId= SessionManager.getInstance().getUserId();
+                query = databaseReference.child("Users").child(userId);
                 query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                DatabaseReference userRef = snapshot.getRef();
-                                User currentUser = snapshot.getValue(User.class);
+                            User currentUser = dataSnapshot.getValue(User.class);
+                            if(currentUser.getCarrito()!=null){
                                 currentUser.addCarrito(article.getNombre());
-                                userRef.setValue(currentUser);
+                                dataSnapshot.getRef().setValue(currentUser.toMap());
+                                Mensaje("Artículo añadido al carrito");
+                            }else{
+                                List<String> carrito= new ArrayList<>();
+                                carrito.add(article.getNombre());
+                                currentUser.setCarrito(carrito);
+                                dataSnapshot.getRef().setValue(currentUser.toMap());
                                 Mensaje("Artículo añadido al carrito");
                             }
                         }else{

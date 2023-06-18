@@ -79,9 +79,6 @@ public class LoginActivity extends AppCompatActivity {
                 this, task -> {
                     if (task.isSuccessful()) {
                         SessionManager.getInstance().setUserEmail(email);
-                        if(email=="monicamelgar061@gmail.com"){
-                            SessionManager.getInstance().setAdmi();
-                        }
                         Intent intent = new Intent();
                         setResult(RESULT_OK,intent);
                         finish();

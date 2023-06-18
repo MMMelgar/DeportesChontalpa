@@ -265,7 +265,7 @@ public class Productos extends AppCompatActivity {
         String T1,T2;
         T1=t1.getText().toString().trim();
         T2=t2.getText().toString().trim();
-        query = databaseReference.child("Articulos").orderByChild("nombre").equalTo(T1);
+        query = databaseReference.child("Articulos").child("nombre").orderByChild("nombre").equalTo(T1);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
