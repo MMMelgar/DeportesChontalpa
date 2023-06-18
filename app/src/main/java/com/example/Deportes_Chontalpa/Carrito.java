@@ -1,140 +1,109 @@
 package com.example.Deportes_Chontalpa;
 
-/*import android.database.Cursor;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-import java.util.ArrayList;*/
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.Deportes_Chontalpa.DB.Article;
+import com.example.Deportes_Chontalpa.DB.CarritoAdapter;
+import com.example.Deportes_Chontalpa.DB.User;
+import com.example.Deportes_Chontalpa.Perfil.Perfil;
+import com.example.Deportes_Chontalpa.Perfil.SessionManager;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Carrito extends AppCompatActivity {
-/*
-    AdminSQLiteOpenHelper DB;
-    Cursor cursor;
-    ListView lista;
-    TextView total;
-    int C,Total;
-    private ListaAdapter adaptador;
+
+    private ListView listaCarrito;
+    private CarritoAdapter carritoAdapter;
+    private List<Article> articulosEnCarrito = new ArrayList<>();
+    private Map<String, Integer> cantidadesEnCarrito = new HashMap<>();
+    DatabaseReference usersRef, articulosRef;
+    Query query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carrito);
-        //Llamado al metodo definirLista()
-        definirLista();
+        Verificacion();
     }
 
-    /**
-     * Metodo encargado de hacer la conexion con la BD
-     *//*
-    public void ejecutarQuery() {
-        DB = new AdminSQLiteOpenHelper(this);
-        Cursor c=DB.getNotas("Carrito");
-        C=0;
-        Total=0;
-        ArrayList<DbRegistros> modelo = new ArrayList<>();
-        if(c.moveToLast()){
-            modelo = Datos(c, modelo);
-        }else{
-            DbRegistros m= new DbRegistros();
-            m.setNombre("No hay productos en el carrito");
-            modelo.add(m);
-        }
-        adaptador=new ListaAdapter(this,modelo);
-    }
-
-    public ArrayList<DbRegistros> Datos(Cursor c, ArrayList<DbRegistros> modelo){
-        DbRegistros m= new DbRegistros();
-        do{
-            Cursor cc=DB.getNota("Arti",c.getString(1));
-            if(cc.moveToLast()){
-                m.setId(c.getString(0));
-                m.setNombre(c.getString(1));
-                m.setDescripcion(c.getString(2));
-                m.setPrecio(c.getString(3));
-                m.setDisponibles(c.getString(4));
-                Cursor c1=DB.getNota("Talla",cc.getString(5));
-                if(c1.moveToLast()){
-                    m.setTalla(c1.getString(2));
-                }else{
-                    m.setTalla("N/A");
-                }
-                c1=DB.getNota("Color",cc.getString(6));
-                if(c1.moveToLast()){
-                    m.setColor(c1.getString(2));
-                }else{
-                    m.setColor("N/A");
-                }
-                c1=DB.getNota("Marca",cc.getString(7));
-                if(c1.moveToLast()){
-                    m.setMarca(c1.getString(2));
-                }else{
-                    m.setMarca("N/A");
-                }
-                c1=DB.getNota("Categoria",cc.getString(8));
-                if(c1.moveToLast()){
-                    m.setCategoria(c1.getString(2));
-                }else{
-                    m.setCategoria("N/A");
-                }
-                modelo.add(m);
+    private void Verificacion() {
+        if (SessionManager.getInstance().getLogIn()) {
+            if (SessionManager.getInstance().getAdmi()) {
+                Mensaje("Solo los usuarios pueden añadir articulos al carrito");
+            } else {
+                usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+                articulosRef = FirebaseDatabase.getInstance().getReference().child("Articulos");
+                listaCarrito = findViewById(R.id.lista);
+                carritoAdapter = new CarritoAdapter(this, articulosEnCarrito, cantidadesEnCarrito);
+                listaCarrito.setAdapter(carritoAdapter);
+                CargarDatosCarrito();
             }
-        }while(c.moveToPrevious());
-        return modelo;
-    }*/
-
-    /**
-     * Metodo encargado de definir los datos del ListView correspondiente
-     *//*
-    public void definirLista() {
-        try {
-            ejecutarQuery();
-            cursor.moveToFirst();
-            lista = findViewById(R.id.lista);
-            total = findViewById(R.id.txt_total);
-            int acum = 0;
-            ArrayList<String> producto = new ArrayList<String>();
-            do {
-                int cant = Integer.parseInt(cursor.getString(1));
-                int precio = Integer.parseInt(cursor.getString(2));
-                producto.add(cursor.getString(0) + " \nCantidad: " + cant + " \n" +
-                        "Precio unitario: $" + precio +
-                        " \nSubtotal: $" + (precio * cant));
-                acum = acum + (precio * cant);
-            } while (cursor.moveToNext());//Fin Do-While
-            ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_list_item_1, producto);
-            lista.setAdapter(adaptador);
-            total.setText(total.getText() + "$" + acum);
-            cursor.close();
-        } catch (Exception e) {
-            Toast.makeText(this, "NO HAY ARTICULOS EN EL CARRITO",
-                    Toast.LENGTH_LONG).show();
+        } else {
+            startActivity(new Intent(Carrito.this, Perfil.class));
+            finish();
         }
-    }*/
+    }
 
-    /**
-     * //limpiar el carrito
-     *
-     * @param view ParÃ¡metro por defecto
-     */
-    /*public void borrarPedido(View view) {
-        //Captura de error de Activity
-        try {
-            //Se habilita BD para escucha
-            HelperBD helper = new HelperBD(this);
-            SQLiteDatabase db = helper.getReadableDatabase();
-            //Se ejecuta una sentencia SQL que elimina todos los registros de la tabla
-            db.execSQL(EstructuraBD.SQL_DELETE_REGISTERS);
-            onCreate(null);
-        } catch (Exception e) {//En caso de error de Activity producido
-            //Se informa por pantalla que el carrito ha sido vaciado
-            Toast.makeText(this, "SE HA VACIADO EL CARRITO", Toast.LENGTH_LONG).show();
-            //Se inicia la Activity MainActivity
-            Intent intento = new Intent(this, MainActivity.class);
-            startActivity(intento);
-        }//Fin Try-Catch
-    }//Fin borrarPedido()*/
+    private void CargarDatosCarrito() {
+        String email = SessionManager.getInstance().getUserEmail().replace(".", "_");
+        query = usersRef.child(email);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    User currentUser = dataSnapshot.getValue(User.class);
+                    if (currentUser != null && currentUser.getCarrito() != null) {
+                        Map<String, Integer> carritoUsuario = currentUser.getCarrito();
+                        articulosRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                articulosEnCarrito.clear();
+                                cantidadesEnCarrito.clear();
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    Article article = snapshot.getValue(Article.class);
+                                    if (article != null && carritoUsuario.containsKey(article.getNombre()) && article.getArticulosDisponibles() > 0) {
+                                        articulosEnCarrito.add(article);
+                                        cantidadesEnCarrito.put(article.getNombre(), carritoUsuario.get(article.getNombre()));
+                                    }
+                                }
+                                if (articulosEnCarrito.isEmpty()) {
+                                    Article nuevoArticulo = new Article("No hay artículos", null, 0, 0, null, null, null, true, false, 0.0, null, null);
+                                    articulosEnCarrito.add(nuevoArticulo);
+                                    cantidadesEnCarrito.put(nuevoArticulo.getNombre(), 1);
+                                }
+                                carritoAdapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Mensaje("Ocurrió un error");
+                                finish();
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Manejar el error
+            }
+        });
+    }
+
+    private void Mensaje(String msj){
+        Toast.makeText(this,msj,Toast.LENGTH_SHORT).show();
+    }
 }

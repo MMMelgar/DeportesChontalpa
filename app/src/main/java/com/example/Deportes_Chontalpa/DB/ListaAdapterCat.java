@@ -1,6 +1,7 @@
 package com.example.Deportes_Chontalpa.DB;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +53,13 @@ public class ListaAdapterCat extends BaseAdapter {
         Article articulo = articulosList.get(position);
 
         nombreTextView.setText(articulo.getNombre());
-        precioTextView.setText("$ "+ articulo.getPrecio());
+        if(articulo.isOfertas()){
+            precioTextView.setText("$ "+ articulo.getPrecioNuevo());
+            precioTextView.setTextColor(Color.GREEN);
+        }else{
+            precioTextView.setText("$ "+ articulo.getPrecio());
+            precioTextView.setTextColor(Color.WHITE);
+        }
         Picasso.get().load(articulo.getImageUrl()).into(imageView);
 
         return view;

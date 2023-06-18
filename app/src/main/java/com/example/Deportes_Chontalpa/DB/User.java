@@ -1,36 +1,36 @@
 package com.example.Deportes_Chontalpa.DB;
 
-import com.example.Deportes_Chontalpa.Perfil.SessionManager;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class User {
-    private String userId;
     private String nombre;
     private String email;
     private String telefono;
     private List<String> direcciones;
     private List<String> metodosDePago;
-    private List<String> carrito;
+    private Map<String,Integer> carrito;
 
     public User() {
-        carrito=new ArrayList<>();
+        carrito = new HashMap<>();
     }
 
-    public void setCarrito(List<String> carrito){
-        this.carrito=carrito;
+    public void setCarrito(Map<String, Integer> carrito) {
+        this.carrito = carrito;
     }
 
-    public List<String> getCarrito(){
-        return(carrito);
+    public Map<String, Integer> getCarrito() {
+        return carrito;
     }
 
-    public void addCarrito(String articulo){
-        carrito.add(articulo);
+    public void addCarrito(String nombreArticulo, int cantidad) {
+        carrito.put(nombreArticulo, cantidad);
+    }
+    public void removeArticuloDelCarrito(String nombreArticulo) {
+        carrito.remove(nombreArticulo);
     }
 
     public void guardarUsuario() {
@@ -57,9 +57,6 @@ public class User {
         return result;
     }
 
-    public String getUserId(){
-        return userId;
-    }
     public String getNombre() {
         return nombre;
     }

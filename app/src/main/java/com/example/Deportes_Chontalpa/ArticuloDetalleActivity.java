@@ -8,6 +8,7 @@ import android.se.omapi.Session;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,13 +31,18 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ArticuloDetalleActivity extends AppCompatActivity {
 
     private ImageView imageView;
     private TextView nombre,descripcion,talla, color, marca, precio, disponible, oferta;
-    private Button agregarCarritoButton;
+    private EditText cantidadEditText;
+    private Button agregarCarritoButton, decrementarButton, incrementarButton;
+    private int cantidad=1;
+    Article articulo;
     DatabaseReference databaseReference;
     Query query;
 
@@ -45,9 +51,9 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lista_item_articulo);
         Definir();
-        Article articulo = getIntent().getParcelableExtra("articulo");
+        articulo = getIntent().getParcelableExtra("articulo");
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
-        Set(articulo);
+        Set();
     }
 
     private void Definir(){
@@ -61,10 +67,28 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
         disponible = findViewById(R.id.Disponible);
         oferta = findViewById(R.id.Oferta);
         agregarCarritoButton = findViewById(R.id.agregarCarritoButton);
+        cantidadEditText = findViewById(R.id.CantidadEditText);
+        decrementarButton = findViewById(R.id.DecrementarButton);
+        incrementarButton = findViewById(R.id.IncrementarButton);
+        decrementarButton.setOnClickListener(v -> {
+            if (cantidad > 1) {
+                cantidad--;
+                cantidadEditText.setText(String.valueOf(cantidad));
+            }
+        });
+        incrementarButton.setOnClickListener(v -> {
+            if(articulo.getArticulosDisponibles()>=cantidad+1){
+                cantidad++;
+                cantidadEditText.setText(String.valueOf(cantidad));
+            }else{
+                Mensaje("No hay mas articulos disponibles");
+                Mensaje("Intentalo mas tarde");
+            }
+        });
     }
 
     @SuppressLint("SetTextI18n")
-    private void Set(Article articulo){
+    private void Set(){
         if (articulo != null) {
             Picasso.get().load(articulo.getImageUrl()).into(imageView);
             nombre.setText(articulo.getNombre());
@@ -75,6 +99,7 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
             if(articulo.getArticulosDisponibles()>0){
                 disponible.setText("Disponible");
                 disponible.setTextColor(Color.GREEN);
+                cantidadEditText.setText(String.valueOf(cantidad));
                 if(articulo.isOfertas()){
                     oferta.setText("OFERTA");
                     precio.setText("Precio: " + articulo.getPrecioNuevo());
@@ -89,17 +114,18 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
                 disponible.setTextColor(Color.RED);
                 oferta.setVisibility(View.GONE);
                 oferta.setVisibility(View.GONE);
+                agregarCarritoButton.setVisibility(View.GONE);
             }
 
             agregarCarritoButton.setOnClickListener(v -> {
-                User(articulo);
+                User();
             });
         }else{
             finish();
         }
     }
 
-    private void User(Article article){
+    private void User(){
         if(SessionManager.getInstance().getLogIn()){
             if(SessionManager.getInstance().getAdmi()){
                 Mensaje("Solo los usuarios pueden añadir articulos al carrito");
@@ -112,12 +138,12 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
                         if (dataSnapshot.exists()) {
                             User currentUser = dataSnapshot.getValue(User.class);
                             if(currentUser.getCarrito()!=null){
-                                currentUser.addCarrito(article.getNombre());
+                                currentUser.addCarrito(articulo.getNombre(),cantidad);
                                 dataSnapshot.getRef().setValue(currentUser.toMap());
                                 Mensaje("Artículo añadido al carrito");
                             }else{
-                                List<String> carrito= new ArrayList<>();
-                                carrito.add(article.getNombre());
+                                Map<String, Integer> carrito = new HashMap<>();
+                                carrito.put(articulo.getNombre(),cantidad);
                                 currentUser.setCarrito(carrito);
                                 dataSnapshot.getRef().setValue(currentUser.toMap());
                                 Mensaje("Artículo añadido al carrito");
