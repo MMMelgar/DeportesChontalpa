@@ -35,12 +35,11 @@ public class User {
 
     public void guardarUsuario() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
-        userId = databaseReference.push().getKey();
-        SessionManager.getInstance().setUserId(userId);
+        String emailKey = email.replace(".", "_");
         Map<String, Object> usuarioValues = toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put(userId, usuarioValues);
+        childUpdates.put(emailKey, usuarioValues);
 
         databaseReference.updateChildren(childUpdates);
     }

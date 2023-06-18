@@ -5,7 +5,7 @@ import java.util.Objects;
 public class SessionManager {
 
     private static SessionManager instance;
-    private String userEmail, userId;
+    private String userEmail;
     protected Boolean LogIn;
 
     private SessionManager() {
@@ -38,14 +38,6 @@ public class SessionManager {
     public void Logout(){
         LogIn=false;
         userEmail=null;
-    }
-
-    public void setUserId(String userId){
-        this.userId=userId;
-    }
-
-    public String getUserId(){
-        return userId;
     }
 
     public void setUserEmail(String userEmail) {

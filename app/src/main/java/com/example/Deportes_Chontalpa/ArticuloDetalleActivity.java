@@ -104,8 +104,8 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
             if(SessionManager.getInstance().getAdmi()){
                 Mensaje("Solo los usuarios pueden añadir articulos al carrito");
             }else{
-                String userId= SessionManager.getInstance().getUserId();
-                query = databaseReference.child("Users").child(userId);
+                String email=SessionManager.getInstance().getUserEmail().replace(".", "_");
+                query = databaseReference.child(email);
                 query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

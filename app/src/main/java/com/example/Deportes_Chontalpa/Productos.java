@@ -217,7 +217,7 @@ public class Productos extends AppCompatActivity {
                 int TT4 = Integer.parseInt(T4);
                 if(TT3>=0 && TT4>=0){
                     try{
-                        query = databaseReference.child("Articulos").orderByChild("nombre").equalTo(T1);
+                        query = databaseReference.child(T1);
                         query.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -254,8 +254,7 @@ public class Productos extends AppCompatActivity {
         UploadTask uploadTask = imageReference.putFile(selectedImageUri);
         uploadTask.addOnSuccessListener(taskSnapshot -> imageReference.getDownloadUrl().addOnSuccessListener(downloadUrl -> {
                 imageUrl = downloadUrl.toString();
-                String key = databaseReference.child("Articulos").push().getKey();
-                Article nuevoArticulo = new Article(key, T1, T2, TT3, TT4, T5, T6, T7, true, false, null, categoria, imageUrl);
+                Article nuevoArticulo = new Article(T1, T2, TT3, TT4, T5, T6, T7, true, false, 0.0, categoria, imageUrl);
                 nuevoArticulo.guardarArticulo();
                 Limpieza();
             }).addOnFailureListener(e -> Mensaje("Error al obtener la URL de la imagen"))).addOnFailureListener(e -> Mensaje("Error al subir la imagen"));
@@ -263,9 +262,9 @@ public class Productos extends AppCompatActivity {
     
     private void Ofertas(){
         String T1,T2;
-        T1=t1.getText().toString().trim();
+        T1=t1.getText().toString().trim().replace(" ","_");
         T2=t2.getText().toString().trim();
-        query = databaseReference.child("Articulos").child("nombre").orderByChild("nombre").equalTo(T1);
+        query = databaseReference.child(T1);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -273,12 +272,11 @@ public class Productos extends AppCompatActivity {
                     Mensaje("Articulo no existente");
                     t1.requestFocus();
                 } else {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        DatabaseReference articleRef = snapshot.getRef();
+                        DatabaseReference articleRef = dataSnapshot.getRef();
+                        articleRef.child("articulosDisponibles").setValue(6);
                         articleRef.child("novedades").setValue(false);
                         articleRef.child("ofertas").setValue(true);
                         articleRef.child("precioNuevo").setValue(Integer.parseInt(T2));
-                    }
                     Mensaje("Producto guardado exitosamente");
                 }
             }
