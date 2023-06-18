@@ -19,7 +19,6 @@ public class CarritoAdapter extends ArrayAdapter<Article> {
 
     private Context context;
     private Map<String, Integer> cantidadMap;
-    double totalArticulo, total;
 
     public CarritoAdapter(Context context, List<Article> articles, Map<String, Integer> cantidadMap) {
         super(context, 0, articles);
@@ -42,28 +41,19 @@ public class CarritoAdapter extends ArrayAdapter<Article> {
             TextView precio = view.findViewById(R.id.Precio);
             TextView cantidad = view.findViewById(R.id.Cantidad);
             TextView disponible = view.findViewById(R.id.Disponible);
-            TextView Total =view.findViewById(R.id.txt_total);
 
             Picasso.get().load(article.getImageUrl()).into(imagen);
             nombre.setText(article.getNombre());
             if(article.isOfertas()){
                 precio.setText(String.valueOf(article.getPrecioNuevo()));
-                if (cantidadMap != null && cantidadMap.containsKey(article.getNombre())) {
-                    int cantidadArticulo = cantidadMap.get(article.getNombre());
-                    cantidad.setText(String.valueOf(cantidadArticulo));
-                    totalArticulo = cantidadArticulo * article.getPrecio();
-                } else {
-                    cantidad.setText("0");
-                }
             }else{
                 precio.setText(String.valueOf(article.getPrecio()));
-                if (cantidadMap != null && cantidadMap.containsKey(article.getNombre())) {
-                    int cantidadArticulo = cantidadMap.get(article.getNombre());
-                    cantidad.setText(String.valueOf(cantidadArticulo));
-                    totalArticulo = cantidadArticulo * article.getPrecioNuevo();
-                } else {
-                    cantidad.setText("0");
-                }
+            }
+            if (cantidadMap != null && cantidadMap.containsKey(article.getNombre())) {
+                int cantidadArticulo = cantidadMap.get(article.getNombre());
+                cantidad.setText(String.valueOf(cantidadArticulo));
+            } else {
+                cantidad.setText("0");
             }
             if (article.getArticulosDisponibles() > 0) {
                 disponible.setText("Disponible");
@@ -72,9 +62,8 @@ public class CarritoAdapter extends ArrayAdapter<Article> {
                 disponible.setText("No disponible");
                 disponible.setTextColor(Color.RED);
             }
-            total=total+totalArticulo;
-            Total.setText(String.valueOf(total));
         }
+
         return view;
     }
 

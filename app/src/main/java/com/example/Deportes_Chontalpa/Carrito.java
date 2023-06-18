@@ -3,6 +3,7 @@ package com.example.Deportes_Chontalpa;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +29,8 @@ public class Carrito extends AppCompatActivity {
     private CarritoAdapter carritoAdapter;
     private List<Article> articulosEnCarrito = new ArrayList<>();
     private Map<String, Integer> cantidadesEnCarrito = new HashMap<>();
+    private Double totalArt, total;
+    private TextView Total;
     DatabaseReference usersRef, articulosRef;
     Query query;
 
@@ -35,6 +38,7 @@ public class Carrito extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carrito);
+        Total=findViewById(R.id.txt_total);
         Verificacion();
     }
 
@@ -70,12 +74,16 @@ public class Carrito extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 articulosEnCarrito.clear();
+                                total=0.0;
+                                totalArt=0.0;
                                 cantidadesEnCarrito.clear();
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                     Article article = snapshot.getValue(Article.class);
                                     if (article != null && carritoUsuario.containsKey(article.getNombre()) && article.getArticulosDisponibles() > 0) {
                                         articulosEnCarrito.add(article);
                                         cantidadesEnCarrito.put(article.getNombre(), carritoUsuario.get(article.getNombre()));
+                                        totalArt = article.getPrecio() * carritoUsuario.get(article.getNombre());
+                                        total += totalArt;
                                     }
                                 }
                                 if (articulosEnCarrito.isEmpty()) {
@@ -84,6 +92,7 @@ public class Carrito extends AppCompatActivity {
                                     cantidadesEnCarrito.put(nuevoArticulo.getNombre(), 1);
                                 }
                                 carritoAdapter.notifyDataSetChanged();
+                                Total.setText("Total: "+ total);
                             }
 
                             @Override
