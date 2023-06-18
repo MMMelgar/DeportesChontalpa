@@ -2,6 +2,8 @@ package com.example.Deportes_Chontalpa.DB;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
@@ -10,21 +12,26 @@ public class User {
     private String telefono;
     private List<String> direcciones;
     private List<String> metodosDePago;
+    private List<String> carrito;
 
     // Constructor vacío necesario para Firebase
     public User() {
+        carrito=new ArrayList<>();
     }
 
-    public User(String nombre, String correo, String telefono, List<String> direcciones, List<String> metodosDePago) {
-        this.nombre = nombre;
+    public List<String> getCarrito(){
+        return(carrito);
+    }
+
+    public void addCarrito(String articulo){
+        carrito.add(articulo);
+    }
+
+    public User(String correo) {
         this.correo = correo;
-        this.telefono = telefono;
-        this.direcciones = direcciones;
-        this.metodosDePago = metodosDePago;
     }
-
     public void guardarUsuario() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Usuarios");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
         String userId = databaseReference.push().getKey();
         databaseReference.child(userId).setValue(this);
     }
@@ -68,4 +75,6 @@ public class User {
     public void setMetodosDePago(List<String> metodosDePago) {
         this.metodosDePago = metodosDePago;
     }
+
+
 }

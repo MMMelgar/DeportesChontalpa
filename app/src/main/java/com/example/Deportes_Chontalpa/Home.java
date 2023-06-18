@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.Deportes_Chontalpa.DB.Article;
 import com.example.Deportes_Chontalpa.DB.ListaAdapterCat;
 import com.example.Deportes_Chontalpa.Perfil.Perfil;
+import com.example.Deportes_Chontalpa.Perfil.SessionManager;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -52,7 +53,17 @@ public class Home extends AppCompatActivity {
             finish();
         });
 
-        btnCarrito.setOnClickListener(v -> startActivity(new Intent(Home.this, Carrito.class)));
+        btnCarrito.setOnClickListener(v -> {
+            if(SessionManager.getInstance().getLogIn()){
+                if(SessionManager.getInstance().getAdmi()){
+                    //Ver pedidos pendientes
+                }else{
+                    startActivity(new Intent(Home.this, Carrito.class));
+                }
+            }else{
+                startActivity(new Intent(Home.this, Perfil.class));
+            }
+        });
 
         btnPerfil.setOnClickListener(v -> startActivity(new Intent(Home.this, Perfil.class)));
     }
@@ -274,5 +285,4 @@ public class Home extends AppCompatActivity {
         toast.setGravity(Gravity.CENTER_VERTICAL,0,0);
         toast.show();
     }
-
 }

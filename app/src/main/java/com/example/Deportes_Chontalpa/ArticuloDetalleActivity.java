@@ -1,29 +1,51 @@
 package com.example.Deportes_Chontalpa;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.se.omapi.Session;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.Deportes_Chontalpa.DB.Article;
+import com.example.Deportes_Chontalpa.DB.User;
+import com.example.Deportes_Chontalpa.Perfil.Perfil;
+import com.example.Deportes_Chontalpa.Perfil.SessionManager;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 public class ArticuloDetalleActivity extends AppCompatActivity {
 
     private ImageView imageView;
     private TextView nombre,descripcion,talla, color, marca, precio, disponible, oferta;
     private Button agregarCarritoButton;
+    DatabaseReference databaseReference;
+    Query query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lista_item_articulo);
-
         Definir();
         Article articulo = getIntent().getParcelableExtra("articulo");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
         Set(articulo);
     }
 
@@ -69,10 +91,49 @@ public class ArticuloDetalleActivity extends AppCompatActivity {
             }
 
             agregarCarritoButton.setOnClickListener(v -> {
-                // Aquí puedes realizar la acción correspondiente al agregar al carrito
+                User(articulo);
             });
         }else{
             finish();
         }
     }
+
+    private void User(Article article){
+        if(SessionManager.getInstance().getLogIn()){
+            if(SessionManager.getInstance().getAdmi()){
+                Mensaje("Solo los usuarios pueden añadir articulos al carrito");
+            }else{
+                query = databaseReference.child("Users").orderByChild("correo").equalTo(SessionManager.getInstance().getUserEmail());
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                DatabaseReference userRef = snapshot.getRef();
+                                User currentUser = snapshot.getValue(User.class);
+                                currentUser.addCarrito(article.getNombre());
+                                userRef.setValue(currentUser);
+                                Mensaje("Artículo añadido al carrito");
+                            }
+                        }else{
+                            Mensaje("Ocurrio un error, intentalo mas tarde");
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        }else{
+            startActivity(new Intent(ArticuloDetalleActivity.this, Perfil.class));
+        }
+    }
+
+    private void Mensaje(String msj){
+        Toast toast=Toast.makeText(this,msj,Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER_VERTICAL,0,0);
+        toast.show();
+    }
+
 }

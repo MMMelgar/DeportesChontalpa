@@ -22,29 +22,13 @@ public class Perfil extends AppCompatActivity implements View.OnClickListener {
     private Button viewOrdersButton, viewPersonalInfoButton, configurationButton, requestReturnButton, logoutButton;
     private LinearLayout loggedInLayout;
     private ActivityResultLauncher<Intent> registro, login;
-    private boolean isLoggedIn;
+    private boolean isLoggedIn=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-
-        registerButton = findViewById(R.id.register_button);
-        loginButton = findViewById(R.id.login_button);
-        viewOrdersButton = findViewById(R.id.view_orders_button);
-        viewPersonalInfoButton = findViewById(R.id.view_personal_info_button);
-        configurationButton = findViewById(R.id.configuration_button);
-        requestReturnButton = findViewById(R.id.request_return_button);
-        logoutButton = findViewById(R.id.logout_button);
-        loggedInLayout = findViewById(R.id.logged_in_layout);
-        registerButton.setOnClickListener(this);
-        loginButton.setOnClickListener(this);
-        viewOrdersButton.setOnClickListener(this);
-        viewPersonalInfoButton.setOnClickListener(this);
-        configurationButton.setOnClickListener(this);
-        requestReturnButton.setOnClickListener(this);
-        logoutButton.setOnClickListener(this);
-        isLoggedIn=false;
+        Declaracion();
         updateUI();
         ActivityResultRegistry registry = getActivityResultRegistry();
         ActivityResultRegistry loginy = getActivityResultRegistry();
@@ -64,8 +48,26 @@ public class Perfil extends AppCompatActivity implements View.OnClickListener {
                 });
     }
 
+    private void Declaracion(){
+        registerButton = findViewById(R.id.register_button);
+        loginButton = findViewById(R.id.login_button);
+        viewOrdersButton = findViewById(R.id.view_orders_button);
+        viewPersonalInfoButton = findViewById(R.id.view_personal_info_button);
+        configurationButton = findViewById(R.id.configuration_button);
+        requestReturnButton = findViewById(R.id.request_return_button);
+        logoutButton = findViewById(R.id.logout_button);
+        loggedInLayout = findViewById(R.id.logged_in_layout);
+        registerButton.setOnClickListener(this);
+        loginButton.setOnClickListener(this);
+        viewOrdersButton.setOnClickListener(this);
+        viewPersonalInfoButton.setOnClickListener(this);
+        configurationButton.setOnClickListener(this);
+        requestReturnButton.setOnClickListener(this);
+        logoutButton.setOnClickListener(this);
+    }
+
     private void updateUI() {
-        if (isLoggedIn) {
+        if (isLoggedIn || SessionManager.getInstance().getLogIn()) {
             registerButton.setVisibility(View.GONE);
             loginButton.setVisibility(View.GONE);
             loggedInLayout.setVisibility(View.VISIBLE);
@@ -99,7 +101,11 @@ public class Perfil extends AppCompatActivity implements View.OnClickListener {
                 login.launch(intentl);
                 break;
             case R.id.view_orders_button:
-                startActivity(new Intent(Perfil.this, Productos.class));
+                if(SessionManager.getInstance().getAdmi()){
+                    startActivity(new Intent(Perfil.this, Productos.class));
+                }else{
+                    //
+                }
                 break;
             case R.id.view_personal_info_button:
                 // Lógica para ver la información personal
@@ -113,6 +119,7 @@ public class Perfil extends AppCompatActivity implements View.OnClickListener {
             case R.id.logout_button:
                 FirebaseAuth.getInstance().signOut();
                 isLoggedIn = false;
+                SessionManager.getInstance().Logout();
                 updateUI();
                 break;
         }

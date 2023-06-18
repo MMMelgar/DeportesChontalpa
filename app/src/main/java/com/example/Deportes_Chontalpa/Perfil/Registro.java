@@ -61,6 +61,11 @@ public class Registro extends AppCompatActivity {
                         databaseReference.child("Users").child(id).setValue(map)
                                 .addOnCompleteListener(task2 -> {
                                     if (task2.isSuccessful()) {
+                                        String userEmail = firebaseAuth.getCurrentUser().getEmail();
+                                        SessionManager.getInstance().setUserEmail(userEmail);
+                                        if(userEmail=="monicamelgar061@gmail.com"){
+                                            SessionManager.getInstance().setAdmi();
+                                        }
                                         Intent intent = new Intent();
                                         setResult(RESULT_OK,intent);
                                         finish();
