@@ -1,7 +1,9 @@
 package com.example.Deportes_Chontalpa;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -9,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.Deportes_Chontalpa.DB.Article;
 import com.example.Deportes_Chontalpa.DB.CarritoAdapter;
+import com.example.Deportes_Chontalpa.DB.Pedido;
 import com.example.Deportes_Chontalpa.DB.User;
 import com.example.Deportes_Chontalpa.Perfil.Perfil;
 import com.example.Deportes_Chontalpa.Perfil.SessionManager;
@@ -31,14 +34,36 @@ public class Carrito extends AppCompatActivity {
     private Map<String, Integer> cantidadesEnCarrito = new HashMap<>();
     private Double totalArt, total;
     private TextView Total;
+    private Button Pagar;
     DatabaseReference usersRef, articulosRef;
     Query query;
+    User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carrito);
         Total=findViewById(R.id.txt_total);
+        Pagar = findViewById(R.id.btn_aceptar);
+        Pagar.setOnClickListener(v -> {
+            String paymentUrl = "https://buy.stripe.com/5kAeYSgLP3f9gwg4gh";
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(paymentUrl));
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            } else {
+                Toast.makeText(getApplicationContext(), "No se encontró una aplicación de navegador", Toast.LENGTH_SHORT).show();
+            }
+            Pedido pedido= new Pedido(total+totalArt+"",currentUser,articulosEnCarrito,total);
+            List<Pedido> pedidos=currentUser.getPedidos();
+            if(pedidos.isEmpty()){
+                pedidos = new ArrayList<>();
+                pedidos.add(pedido);
+            }else{
+                pedidos.add(pedido);
+            }
+            currentUser.setPedidos(pedidos);
+        });
         Verificacion();
     }
 
@@ -67,7 +92,7 @@ public class Carrito extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    User currentUser = dataSnapshot.getValue(User.class);
+                    currentUser = dataSnapshot.getValue(User.class);
                     if (currentUser != null && currentUser.getCarrito() != null) {
                         Map<String, Integer> carritoUsuario = currentUser.getCarrito();
                         articulosRef.addListenerForSingleValueEvent(new ValueEventListener() {

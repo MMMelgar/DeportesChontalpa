@@ -12,6 +12,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.ActivityResultRegistry;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.Deportes_Chontalpa.PedidosActivity;
 import com.example.Deportes_Chontalpa.Productos;
 import com.example.Deportes_Chontalpa.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,7 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class Perfil extends AppCompatActivity implements View.OnClickListener {
     private Button registerButton;
     private Button loginButton;
-    private Button viewOrdersButton, viewPersonalInfoButton, configurationButton, requestReturnButton, logoutButton;
+    private Button viewOrdersButton, logoutButton;
     private LinearLayout loggedInLayout;
     private ActivityResultLauncher<Intent> registro, login;
     private boolean isLoggedIn=false;
@@ -52,9 +54,6 @@ public class Perfil extends AppCompatActivity implements View.OnClickListener {
         registerButton = findViewById(R.id.register_button);
         loginButton = findViewById(R.id.login_button);
         viewOrdersButton = findViewById(R.id.view_orders_button);
-        viewPersonalInfoButton = findViewById(R.id.view_personal_info_button);
-        configurationButton = findViewById(R.id.configuration_button);
-        requestReturnButton = findViewById(R.id.request_return_button);
         logoutButton = findViewById(R.id.logout_button);
         loggedInLayout = findViewById(R.id.logged_in_layout);
         registerButton.setOnClickListener(this);
@@ -104,17 +103,8 @@ public class Perfil extends AppCompatActivity implements View.OnClickListener {
                 if(SessionManager.getInstance().getAdmi()){
                     startActivity(new Intent(Perfil.this, Productos.class));
                 }else{
-                    //
+                    startActivity(new Intent(Perfil.this, PedidosActivity.class));
                 }
-                break;
-            case R.id.view_personal_info_button:
-                // Lógica para ver la información personal
-                break;
-            case R.id.configuration_button:
-                // Lógica para la configuración
-                break;
-            case R.id.request_return_button:
-                // Lógica para solicitar una devolución
                 break;
             case R.id.logout_button:
                 FirebaseAuth.getInstance().signOut();

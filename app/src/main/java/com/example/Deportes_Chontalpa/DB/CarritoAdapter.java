@@ -41,6 +41,8 @@ public class CarritoAdapter extends ArrayAdapter<Article> {
             TextView precio = view.findViewById(R.id.Precio);
             TextView cantidad = view.findViewById(R.id.Cantidad);
             TextView disponible = view.findViewById(R.id.Disponible);
+            cantidad.setVisibility(View.VISIBLE);
+            disponible.setVisibility(View.VISIBLE);
 
             Picasso.get().load(article.getImageUrl()).into(imagen);
             nombre.setText(article.getNombre());

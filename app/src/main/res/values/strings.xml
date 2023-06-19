@@ -22,5 +22,6 @@
     <string name="ingresa_con_tu_cuenta">Ingresa con tu cuenta de Deportes Chontalpa</string>
     <string name="olvidaste_la_contrase_a">¿Olvidaste la contraseña?</string>
     <string name="iniciar_sesion">INICIAR SESION</string>
+    <string name="pedidos">Pedidos</string>
 
 </resources>

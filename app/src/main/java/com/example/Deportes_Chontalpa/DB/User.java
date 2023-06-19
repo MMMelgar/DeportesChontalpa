@@ -2,6 +2,8 @@ package com.example.Deportes_Chontalpa.DB;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,9 +15,11 @@ public class User {
     private List<String> direcciones;
     private List<String> metodosDePago;
     private Map<String,Integer> carrito;
+    private List<Pedido> pedidos;
 
     public User() {
         carrito = new HashMap<>();
+        pedidos = new ArrayList<>();
     }
 
     public void setCarrito(Map<String, Integer> carrito) {
@@ -24,6 +28,14 @@ public class User {
 
     public Map<String, Integer> getCarrito() {
         return carrito;
+    }
+
+    public void setPedidos(List<Pedido> pedidos) {
+        this.pedidos = pedidos;
+    }
+
+    public List<Pedido> getPedidos() {
+        return pedidos;
     }
 
     public void addCarrito(String nombreArticulo, int cantidad) {
@@ -53,6 +65,7 @@ public class User {
         result.put("direcciones", direcciones);
         result.put("metodosDePago", metodosDePago);
         result.put("carrito", carrito);
+        result.put("pedidos", pedidos);
 
         return result;
     }
