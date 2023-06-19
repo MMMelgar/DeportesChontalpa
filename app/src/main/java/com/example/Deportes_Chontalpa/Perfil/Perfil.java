@@ -59,9 +59,6 @@ public class Perfil extends AppCompatActivity implements View.OnClickListener {
         registerButton.setOnClickListener(this);
         loginButton.setOnClickListener(this);
         viewOrdersButton.setOnClickListener(this);
-        viewPersonalInfoButton.setOnClickListener(this);
-        configurationButton.setOnClickListener(this);
-        requestReturnButton.setOnClickListener(this);
         logoutButton.setOnClickListener(this);
     }
 

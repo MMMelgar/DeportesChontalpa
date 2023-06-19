@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.Deportes_Chontalpa.DB.Pedido;
 import com.example.Deportes_Chontalpa.DB.PedidosAdapter;
@@ -22,6 +24,7 @@ import java.util.List;
 public class PedidosActivity extends AppCompatActivity {
 
     private ListView listaPedidos;
+    private TextView txt;
     private PedidosAdapter pedidosAdapter;
     private List<Pedido> listaDePedidos = new ArrayList<>();
     DatabaseReference usersRef;
@@ -43,13 +46,20 @@ public class PedidosActivity extends AppCompatActivity {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                listaDePedidos.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Pedido pedido = snapshot.getValue(Pedido.class);
-                    if (pedido != null) {
-                        listaDePedidos.add(pedido);
+                if(dataSnapshot.exists()){
+                    listaDePedidos.clear();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Pedido pedido = snapshot.getValue(Pedido.class);
+                        if (pedido != null) {
+                            listaDePedidos.add(pedido);
+                        }
                     }
+                }else{
+                    txt=findViewById(R.id.txt);
+                    txt.setVisibility(View.VISIBLE);
+                    txt.setText("No hay pedidos recientes");
                 }
+
                 pedidosAdapter.notifyDataSetChanged();
             }
 
