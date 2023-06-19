@@ -12,9 +12,7 @@ public class SS1 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ss1);
-
         FirebaseApp.initializeApp(this);
-
         new Handler().postDelayed(() -> {
             startActivity(new Intent(SS1.this, Home.class));
             finish();

@@ -1,5 +1,6 @@
 package com.example.Deportes_Chontalpa;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,24 +29,23 @@ import java.util.Map;
 
 public class Carrito extends AppCompatActivity {
 
-    private ListView listaCarrito;
     private CarritoAdapter carritoAdapter;
-    private List<Article> articulosEnCarrito = new ArrayList<>();
-    private Map<String, Integer> cantidadesEnCarrito = new HashMap<>();
+    private final List<Article> articulosEnCarrito = new ArrayList<>();
+    private final Map<String, Integer> cantidadesEnCarrito = new HashMap<>();
     private Double totalArt, total;
     private TextView Total;
-    private Button Pagar;
     DatabaseReference usersRef, articulosRef;
     Query query;
     User currentUser;
 
+    @SuppressLint("QueryPermissionsNeeded")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carrito);
         Total=findViewById(R.id.txt_total);
-        Pagar = findViewById(R.id.btn_aceptar);
-        Pagar.setOnClickListener(v -> {
+        Button pagar = findViewById(R.id.btn_aceptar);
+        pagar.setOnClickListener(v -> {
             String paymentUrl = "https://buy.stripe.com/5kAeYSgLP3f9gwg4gh";
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse(paymentUrl));
@@ -63,6 +63,7 @@ public class Carrito extends AppCompatActivity {
                 pedidos.add(pedido);
             }
             currentUser.setPedidos(pedidos);
+            articulosEnCarrito.clear();
         });
         Verificacion();
     }
@@ -74,9 +75,10 @@ public class Carrito extends AppCompatActivity {
             } else {
                 usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
                 articulosRef = FirebaseDatabase.getInstance().getReference().child("Articulos");
-                listaCarrito = findViewById(R.id.lista);
+                ListView listaCarrito = findViewById(R.id.lista);
                 carritoAdapter = new CarritoAdapter(this, articulosEnCarrito, cantidadesEnCarrito);
                 listaCarrito.setAdapter(carritoAdapter);
+                carritoAdapter.notifyDataSetChanged();
                 CargarDatosCarrito();
             }
         } else {
@@ -96,6 +98,7 @@ public class Carrito extends AppCompatActivity {
                     if (currentUser != null && currentUser.getCarrito() != null) {
                         Map<String, Integer> carritoUsuario = currentUser.getCarrito();
                         articulosRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @SuppressLint("SetTextI18n")
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 articulosEnCarrito.clear();

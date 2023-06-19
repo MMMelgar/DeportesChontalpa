@@ -56,7 +56,7 @@ public class Home extends AppCompatActivity {
         btnCarrito.setOnClickListener(v -> {
             if(SessionManager.getInstance().getLogIn()){
                 if(SessionManager.getInstance().getAdmi()){
-                    //Ver pedidos pendientes
+                    Mensaje("Solo los usuarios pueden acceder al carrito");
                 }else{
                     startActivity(new Intent(Home.this, Carrito.class));
                 }

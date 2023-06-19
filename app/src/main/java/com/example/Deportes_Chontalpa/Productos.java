@@ -31,7 +31,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 public class Productos extends AppCompatActivity {
-
     Spinner spiner, spc;
     EditText t1,t2,t3,t4,t5,t6,t7;
     Button btna;
@@ -304,5 +303,4 @@ public class Productos extends AppCompatActivity {
         toast.setGravity(Gravity.CENTER_VERTICAL,0,0);
         toast.show();
     }
-
 }

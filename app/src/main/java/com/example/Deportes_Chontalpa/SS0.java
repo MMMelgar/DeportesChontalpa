@@ -11,7 +11,6 @@ public class SS0 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ss0);
-
         new Handler().postDelayed(() -> {
             startActivity(new Intent(SS0.this, SS1.class));
             finish();
